@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     # 将 app_env 的默认值直接设为 APP_ENV
     app_env: str = APP_ENV
     llm_api_url: str
+    llm_api_url_agent: str
     llm_api_key: str
     llm_model_name: str
     # 移除这里的默认值，让它完全从 .env.* 文件中读取，更符合预期

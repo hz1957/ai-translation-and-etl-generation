@@ -5,3 +5,6 @@ pydantic-settings
 python-dotenv
 httpx
 cachetools
+autogen-agentchat
+autogen-ext[openai]
+autogen-ext[azure]
