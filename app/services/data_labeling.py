@@ -76,7 +76,7 @@ async def map_data_schemas(source_data: Dict[str, Any]):
     async def process_table(target_table):
         nonlocal total_tables, mapped_tables, total_fields, mapped_fields
         total_tables += 1
-        target_table_info = f"Table: {target_table['name']}\nDescription: {target_table.get('description', 'No description provided')}\n"
+        target_table_info = f"Table: {target_table['name']}\n"
         target_table_info += "Fields:\n"
         for field in target_table['fields']:
             target_table_info += f"  - {field['name']} ({field.get('type', 'unknown')}): {field.get('description', 'No description provided')}\n"
@@ -168,7 +168,6 @@ async def map_data_schemas(source_data: Dict[str, Any]):
     for table_mapping in table_mappings:
         result["tableMappings"].append(table_mapping)
     
-
     # Update statistics
     result["statistics"]["totalTables"] = total_tables
     result["statistics"]["totalFields"] = total_fields
