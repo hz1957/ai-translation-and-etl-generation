@@ -160,8 +160,8 @@ class TableMapping(BaseModel):
     """
     表格映射结果模型 (内部使用)
     """
-    sourceTable: Optional[str] = Field(None, description="源表名称，可为空表示新表")
     targetTable: str = Field(..., description="目标标准表名称")
+    sourceTable: Optional[str] = Field(None, description="源表名称，可为空表示新表")
     mappings: Dict[str, str] = Field(..., description="字段映射关系，key为源字段，value为目标字段")
     confidence: float = Field(..., description="映射置信度，0-1之间的浮点数")
     description: str = Field(..., description="映射描述，说明映射的依据和理由")
@@ -187,8 +187,8 @@ class SchemaMappingResponse(BaseModel):
                 },
                 "tableMappings": [
                     {
-                        "sourceTable": "SUBJ",
                         "targetTable": "dm",
+                        "sourceTable": "SUBJ",
                         "mappings": {"SUBJID": "SUBJID", "AGE": "AGE"},
                         "confidence": 0.95,
                         "description": "高置信度映射，字段名称和类型完全匹配"

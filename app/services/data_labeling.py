@@ -91,8 +91,8 @@ async def map_data_schemas(source_data: Dict[str, Any]):
         if table_result['source_table'] == "Nothing Compatible" or table_result['confidence'] < 0.86:
             print(f"Target table '{target_table['name']}' has no compatible source table (confidence: {table_result['confidence']:.3f})")
             return {
-                "sourceTable": None,
                 "targetTable": target_table['name'],
+                "sourceTable": None,
                 "mappings": {},
                 "confidence": table_result['confidence'],
                 "description": f"No compatible source table (confidence < 0.86): {table_result['confidence']:.3f}"
@@ -108,8 +108,8 @@ async def map_data_schemas(source_data: Dict[str, Any]):
         if not source_table:
             print(f"Source table '{source_table_name}' not found in source data.")
             return {
-                "sourceTable": None,
                 "targetTable": target_table['name'],
+                "sourceTable": None,
                 "mappings": {},
                 "confidence": table_result['confidence'],
                 "description": "Source table not found"
@@ -153,8 +153,8 @@ async def map_data_schemas(source_data: Dict[str, Any]):
         
         # Return table mapping to be added to results
         return {
-            "sourceTable": source_table_name,
             "targetTable": target_table['name'],
+            "sourceTable": source_table_name,
             "mappings": field_mappings,
             "confidence": table_result['confidence'],
             "description": f"Mapped table with confidence: {table_result['confidence']:.3f}"
