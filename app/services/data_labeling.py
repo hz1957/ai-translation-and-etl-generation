@@ -1,4 +1,4 @@
-from ..agents.data_agent import DataAgent
+from ..agents.data_agent import DataAnnotationAgent as DataAgent
 import asyncio
 import json
 import os
@@ -22,7 +22,7 @@ def format_source_table_desc(table):
     table_desc += "\n"
     return table_desc
 
-async def map_data_schemas(source_data: Dict[str, Any], target_schema: Dict[str, Any]):
+async def map_data_schemas(source_data: Dict[str, Any]):
     """Map source data tables and fields to target schema using semantic analysis.
     
     Args:
@@ -34,6 +34,7 @@ async def map_data_schemas(source_data: Dict[str, Any], target_schema: Dict[str,
     """
     data_agent = DataAgent()
     
+    target_schema = source_data.get('labelVersion', {})
     # Use provided target_schema directly
     if not target_schema:
         raise ValueError("target_schema is required and cannot be empty")

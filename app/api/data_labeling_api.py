@@ -2,13 +2,12 @@ from fastapi import APIRouter, HTTPException
 from typing import Dict, List, Optional, Any
 import json
 import os
-from ..services.data_task import map_data_schemas
+from ..services.data_labeling import map_data_schemas
 from ..schemas import (
-    FieldConfig, Table, SourceData, FieldMapping, FieldMappings, LabelVersion,
-    SchemaMappingRequest, TableMapping, SchemaMappingResponse
+    SchemaMappingRequest, SchemaMappingResponse
 )
 
-router = APIRouter(prefix="/api/data-annotation")
+router = APIRouter(prefix="/api/data-labeling")
 
 @router.post("/map-schemas", response_model=SchemaMappingResponse)
 async def map_schemas_endpoint(request: SchemaMappingRequest):
@@ -24,8 +23,7 @@ async def map_schemas_endpoint(request: SchemaMappingRequest):
     try:
         # 调用 map_data_schemas 函数处理源数据和目标数据
         result = await map_data_schemas(
-            source_data=request.source_data.model_dump(),
-            target_schema=request.target_schema
+            source_data=request.model_dump(),
         )
         
         return result

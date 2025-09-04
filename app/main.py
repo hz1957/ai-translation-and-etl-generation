@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from .config.logging import configure_logging
 from .api.endpoints import router as api_router
-from .api.data_annotation_api import router as data_annotation_router
+from .api.data_labeling_api import router as data_annotation_router
 from .handlers.exception_handlers import generic_exception_handler
 from .clients.http_client import lifespan
 

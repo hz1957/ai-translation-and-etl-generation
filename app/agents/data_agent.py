@@ -20,7 +20,7 @@ qwen3 = OpenAIChatCompletionClient(
             max_tokens=8000
         )
 
-class DataAgent:
+class DataAnnotationAgent:
     def __init__(self, model = qwen3):
         self.model = model
 

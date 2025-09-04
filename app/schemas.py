@@ -69,286 +69,112 @@ class ErrorDetail(BaseModel):
 # Data schema mapping models
 class FieldConfig(BaseModel):
     """
-    字段配置模型
+    字段配置模型 (内部使用)
     """
-    configId: Optional[int] = Field(None, description="配置ID，可选")
-    fieldName: str = Field(..., description="字段名称")
-    fieldLabel: str = Field(..., description="字段标签/显示名称")
-    fieldType: str = Field(..., description="字段类型")
-    fieldLength: Optional[int] = Field(None, description="字段长度，可选")
-    sortOrder: Optional[int] = Field(None, description="排序顺序，可选")
-    createTime: Optional[str] = Field(None, description="创建时间，可选")
+    configId: Optional[int] = Field(None, description="配置ID，用于唯一标识字段配置")
+    fieldName: str = Field(..., description="字段名称，对应数据表中的列名")
+    fieldLabel: str = Field(..., description="字段标签，字段的中文显示名称")
+    fieldType: str = Field(..., description="字段类型，如String、Number、Date等")
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "configId": 1,
-                "fieldName": "user_id",
-                "fieldLabel": "用户ID",
-                "fieldType": "VARCHAR",
-                "fieldLength": 50,
-                "sortOrder": 1,
-                "createTime": "2023-01-01T00:00:00Z"
-            }
-        }
+class TableInfo(BaseModel):
+    """
+    表格信息模型 (内部使用)
+    """
+    tableName: str = Field(..., description="表格名称，用于标识数据表")
+    fields: List[Dict[str, Any]] = Field(..., description="字段定义列表，包含字段名称、类型、标签等信息")
+    detailData: List[Dict[str, Any]] = Field(..., description="表格详细数据，包含实际的数据记录")
 
-class Table(BaseModel):
+class OriginalData(BaseModel):
     """
-    表格模型
+    原始数据模型 (内部使用)
     """
-    tableName: str = Field(..., description="表格名称")
-    fields: List[Dict[str, Any]] = Field(..., description="字段配置列表")
-    detailData: List[Dict[str, Any]] = Field(..., description="详细数据列表")
+    tables: List[TableInfo] = Field(..., description="数据表列表，包含所有需要处理的数据表")
+    totalTables: int = Field(..., description="数据表总数")
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "tableName": "users",
-                "fields": [
-                    {
-                        "fieldName": "user_id",
-                        "fieldType": "VARCHAR",
-                        "fieldLength": 50
-                    }
-                ],
-                "detailData": [
-                    {
-                        "user_id": "001",
-                        "user_name": "张三"
-                    }
-                ]
-            }
-        }
+class StandardTable(BaseModel):
+    """
+    标准表格定义模型 (内部使用)
+    """
+    name: str = Field(..., description="标准表名称，如dm、ae等CDASH标准表名")
+    description: str = Field(..., description="标准表描述，说明表格的用途和包含的数据类型")
+    fields: List[Dict[str, Any]] = Field(..., description="标准字段定义列表，包含字段名、类型、描述等信息")
 
-class SourceData(BaseModel):
+class LabelVersion(BaseModel):
     """
-    源数据模型
+    标签版本信息模型 (内部使用)
     """
-    originalData: Dict[str, Any] = Field(..., description="原始数据字典")
-    labelVersion: Dict[str, Any] = Field(..., description="标签版本信息")
-    requestTime: Optional[str] = Field(None, description="请求时间，可选")
-    requestType: Optional[str] = Field(None, description="请求类型，可选")
+    versionId: str = Field(..., description="版本ID，用于唯一标识标签版本")
+    versionName: str = Field(..., description="版本名称，版本的显示名称")
+    description: str = Field(..., description="版本描述，说明版本的主要内容和更新")
+    createTime: str = Field(..., description="创建时间，格式为ISO 8601")
+    tables: List[StandardTable] = Field(..., description="标准表定义列表，包含该版本支持的所有标准表")
+    requestTime: Optional[str] = Field(None, description="请求时间，格式为ISO 8601")
+    requestType: Optional[str] = Field(None, description="请求类型，标识请求的类型如FIELD_LABEL_MAPPING")
+
+# Request and response models
+class SchemaMappingRequest(BaseModel):
+    """
+    模式映射请求体模型
+    """
+    originalData: OriginalData = Field(..., description="原始数据，包含需要映射的数据表信息")
+    labelVersion: LabelVersion = Field(..., description="标签版本信息，包含标准表定义和版本信息")
 
     class Config:
         json_schema_extra = {
             "example": {
                 "originalData": {
-                    "users": [
-                        {"id": 1, "name": "张三"},
-                        {"id": 2, "name": "李四"}
-                    ]
+                    "tables": [
+                        {
+                            "tableName": "SUBJ",
+                            "fields": [
+                                {"fieldName": "SUBJID", "fieldType": "String", "fieldLabel": "受试者编号"},
+                                {"fieldName": "AGE", "fieldType": "Number", "fieldLabel": "年龄"}
+                            ],
+                            "detailData": [
+                                {"SUBJID": "001", "AGE": "25", "rowNumber": 1}
+                            ]
+                        }
+                    ],
+                    "totalTables": 1
                 },
                 "labelVersion": {
-                    "versionId": "v1.0",
-                    "versionName": "版本1.0"
-                },
-                "requestTime": "2023-01-01T12:00:00Z",
-                "requestType": "schema_mapping"
-            }
-        }
-
-class FieldMapping(BaseModel):
-    """
-    字段映射模型
-    """
-    config: FieldConfig = Field(..., description="字段配置信息")
-    sampleValues: List[Any] = Field(..., description="样本值列表")
-    valueCount: int = Field(..., description="值计数")
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "config": {
-                    "configId": 1,
-                    "fieldName": "user_id",
-                    "fieldLabel": "用户ID",
-                    "fieldType": "VARCHAR"
-                },
-                "sampleValues": ["001", "002", "003"],
-                "valueCount": 3
-            }
-        }
-
-class FieldMappings(BaseModel):
-    """
-    字段映射集合模型
-    """
-    DOMAIN: FieldMapping = Field(..., description="域字段映射")
-    VARIABLE: FieldMapping = Field(..., description="变量字段映射")
-    LABEL: FieldMapping = Field(..., description="标签字段映射")
-    TYPE: FieldMapping = Field(..., description="类型字段映射")
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "DOMAIN": {
-                    "config": {
-                        "fieldName": "domain",
-                        "fieldLabel": "域",
-                        "fieldType": "VARCHAR"
-                    },
-                    "sampleValues": ["USER", "PRODUCT"],
-                    "valueCount": 2
-                },
-                "VARIABLE": {
-                    "config": {
-                        "fieldName": "variable",
-                        "fieldLabel": "变量",
-                        "fieldType": "VARCHAR"
-                    },
-                    "sampleValues": ["ID", "NAME"],
-                    "valueCount": 2
-                },
-                "LABEL": {
-                    "config": {
-                        "fieldName": "label",
-                        "fieldLabel": "标签",
-                        "fieldType": "VARCHAR"
-                    },
-                    "sampleValues": ["用户ID", "姓名"],
-                    "valueCount": 2
-                },
-                "TYPE": {
-                    "config": {
-                        "fieldName": "type",
-                        "fieldLabel": "类型",
-                        "fieldType": "VARCHAR"
-                    },
-                    "sampleValues": ["STRING", "INTEGER"],
-                    "valueCount": 2
-                }
-            }
-        }
-
-class LabelVersion(BaseModel):
-    """
-    标签版本模型
-    """
-    versionId: Optional[str] = Field(None, description="版本ID，可选")
-    versionName: Optional[str] = Field(None, description="版本名称，可选")
-    description: Optional[str] = Field(None, description="版本描述，可选")
-    createTime: Optional[str] = Field(None, description="创建时间，可选")
-    tableConfig: List[FieldConfig] = Field(..., description="表格配置列表")
-    fieldMappings: FieldMappings = Field(..., description="字段映射集合")
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "versionId": "v1.0",
-                "versionName": "版本1.0",
-                "description": "用户数据标签版本",
-                "createTime": "2023-01-01T00:00:00Z",
-                "tableConfig": [
-                    {
-                        "fieldName": "user_id",
-                        "fieldLabel": "用户ID",
-                        "fieldType": "VARCHAR",
-                        "fieldLength": 50
-                    }
-                ],
-                "fieldMappings": {
-                    "DOMAIN": {
-                        "config": {
-                            "fieldName": "domain",
-                            "fieldLabel": "域"
-                        },
-                        "sampleValues": ["USER"],
-                        "valueCount": 1
-                    },
-                    "VARIABLE": {
-                        "config": {
-                            "fieldName": "variable",
-                            "fieldLabel": "变量"
-                        },
-                        "sampleValues": ["ID"],
-                        "valueCount": 1
-                    },
-                    "LABEL": {
-                        "config": {
-                            "fieldName": "label",
-                            "fieldLabel": "标签"
-                        },
-                        "sampleValues": ["用户ID"],
-                        "valueCount": 1
-                    },
-                    "TYPE": {
-                        "config": {
-                            "fieldName": "type",
-                            "fieldLabel": "类型"
-                        },
-                        "sampleValues": ["STRING"],
-                        "valueCount": 1
-                    }
-                }
-            }
-        }
-
-class SchemaMappingRequest(BaseModel):
-    """
-    模式映射请求模型
-    """
-    source_data: SourceData = Field(..., description="源数据")
-    target_schema: Dict[str, Any] = Field(..., description="目标模式字典")
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "source_data": {
-                    "originalData": {
-                        "users": [
-                            {"id": 1, "name": "张三"},
-                            {"id": 2, "name": "李四"}
-                        ]
-                    },
-                    "labelVersion": {
-                        "versionId": "v1.0",
-                        "versionName": "版本1.0"
-                    },
-                    "requestTime": "2023-01-01T12:00:00Z",
-                    "requestType": "schema_mapping"
-                },
-                "target_schema": {
-                    "users": {
-                        "user_id": {"type": "string"},
-                        "user_name": {"type": "string"}
-                    }
+                    "versionId": "CDASH_V1_0",
+                    "versionName": "CDASH标准标签库v1.0",
+                    "description": "CDASH标准数据收集表格v1.0版本",
+                    "createTime": "2024-01-01T00:00:00.000Z",
+                    "tables": [
+                        {
+                            "name": "dm",
+                            "description": "Demographics: contains information about the subjects",
+                            "fields": [
+                                {"name": "SUBJID", "type": "string", "description": "What is the subject identifier?"},
+                                {"name": "AGE", "type": "integer", "description": "What is the subject's age?"}
+                            ]
+                        }
+                    ]
                 }
             }
         }
 
 class TableMapping(BaseModel):
     """
-    表格映射模型
+    表格映射结果模型 (内部使用)
     """
-    sourceTable: Optional[str] = Field(None, description="源表格名称，可选")
-    targetTable: str = Field(..., description="目标表格名称")
-    mappings: Dict[str, str] = Field(..., description="字段映射字典")
-    confidence: float = Field(..., description="映射置信度")
-    description: str = Field(..., description="映射描述")
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "sourceTable": "users",
-                "targetTable": "user_info",
-                "mappings": {
-                    "id": "user_id",
-                    "name": "user_name"
-                },
-                "confidence": 0.95,
-                "description": "用户表到用户信息表的映射"
-            }
-        }
+    sourceTable: Optional[str] = Field(None, description="源表名称，可为空表示新表")
+    targetTable: str = Field(..., description="目标标准表名称")
+    mappings: Dict[str, str] = Field(..., description="字段映射关系，key为源字段，value为目标字段")
+    confidence: float = Field(..., description="映射置信度，0-1之间的浮点数")
+    description: str = Field(..., description="映射描述，说明映射的依据和理由")
 
 class SchemaMappingResponse(BaseModel):
     """
-    模式映射响应模型
+    模式映射响应体模型
     """
-    success: bool = Field(..., description="映射是否成功")
-    errorMessage: Optional[str] = Field(None, description="错误信息，可选")
-    standardVersion: Dict[str, Any] = Field(..., description="标准版本信息")
-    tableMappings: List[TableMapping] = Field(..., description="表格映射列表")
-    statistics: Dict[str, Any] = Field(..., description="统计信息字典")
+    success: bool = Field(..., description="请求是否成功")
+    errorMessage: Optional[str] = Field(None, description="错误信息，请求失败时提供详细错误描述")
+    standardVersion: Dict[str, Any] = Field(..., description="标准版本信息，包含使用的CDASH标准版本详情")
+    tableMappings: List[TableMapping] = Field(..., description="表格映射结果列表，包含所有表的映射关系")
+    statistics: Dict[str, Any] = Field(..., description="映射统计信息，包含映射成功率等统计数据")
 
     class Config:
         json_schema_extra = {
@@ -356,25 +182,22 @@ class SchemaMappingResponse(BaseModel):
                 "success": True,
                 "errorMessage": None,
                 "standardVersion": {
-                    "version": "1.0",
-                    "name": "数据标准"
+                    "versionId": "CDASH_V1_0",
+                    "versionName": "CDASH标准标签库v1.0"
                 },
                 "tableMappings": [
                     {
-                        "sourceTable": "users",
-                        "targetTable": "user_info",
-                        "mappings": {
-                            "id": "user_id",
-                            "name": "user_name"
-                        },
+                        "sourceTable": "SUBJ",
+                        "targetTable": "dm",
+                        "mappings": {"SUBJID": "SUBJID", "AGE": "AGE"},
                         "confidence": 0.95,
-                        "description": "用户表到用户信息表的映射"
+                        "description": "高置信度映射，字段名称和类型完全匹配"
                     }
                 ],
                 "statistics": {
                     "totalTables": 1,
-                    "totalFields": 2,
-                    "averageConfidence": 0.95
+                    "mappedTables": 1,
+                    "successRate": 1.0
                 }
             }
         }
