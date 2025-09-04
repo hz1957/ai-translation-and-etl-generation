@@ -1,6 +1,6 @@
 # 使用阿里云的Python 3.9 slim版本作为基础镜像，加速国内构建
 # slim版本体积更小，适合生产环境
-FROM registry.cn-hangzhou.aliyuncs.com/library/python:3.9-slim
+FROM python:3.11-slim
 
 # 设置工作目录
 WORKDIR /app
