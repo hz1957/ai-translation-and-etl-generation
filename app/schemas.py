@@ -96,7 +96,6 @@ class StandardTable(BaseModel):
     标准表格定义模型 (内部使用)
     """
     name: str = Field(..., description="标准表名称，如dm、ae等CDASH标准表名")
-    description: str = Field(..., description="标准表描述，说明表格的用途和包含的数据类型")
     fields: List[Dict[str, Any]] = Field(..., description="标准字段定义列表，包含字段名、类型、描述等信息")
 
 class LabelVersion(BaseModel):

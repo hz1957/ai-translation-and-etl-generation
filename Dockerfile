@@ -1,9 +1,25 @@
-# 使用阿里云的Python 3.9 slim版本作为基础镜像，加速国内构建
-# slim版本体积更小，适合生产环境
+# 使用 Python 3.11-slim 作为基础镜像
 FROM python:3.11-slim
+
+# 安装 Node.js 18.x
+RUN apt-get update && \
+    apt-get install -y curl gnupg && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # 设置工作目录
 WORKDIR /app
+
+# 复制 package.json
+COPY package.json ./
+
+# 安装 Node.js 依赖 (including devDependencies for Playwright)
+RUN npm install
+
+# 安装 Playwright 浏览器（只安装 chromium 以减小镜像体积）
+RUN npx playwright install chromium
 
 # 将依赖文件复制到工作目录
 COPY requirements.txt .
@@ -18,6 +34,7 @@ COPY .env.prod /app/.env.prod
 # 将应用代码复制到工作目录
 COPY ./app /app/app
 COPY ./static /app/static
+COPY ./knowledge_base /app/knowledge_base
 
 # 设置环境变量，指定为生产环境
 # 这将使 app/config.py 加载 .env.prod 文件

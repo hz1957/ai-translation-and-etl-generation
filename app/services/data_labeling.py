@@ -22,7 +22,7 @@ def format_source_table_desc(table):
     table_desc += "\n"
     return table_desc
 
-async def map_data_schemas(source_data: Dict[str, Any]):
+async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
     """Map source data tables and fields to target schema using semantic analysis.
     
     Args:
