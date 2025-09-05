@@ -22,8 +22,9 @@ test:
 clean:
 	@echo "🧹 清理项目..."
 	@rm -rf node_modules
-	@rm -rf __pycache__
+	@find . -type d -name "__pycache__" -exec rm -rf {} +
 	@rm -rf .pytest_cache
+	@rm -rf test-results
 
 # 构建 Docker 镜像
 docker-build:
