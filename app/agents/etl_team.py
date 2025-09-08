@@ -6,7 +6,7 @@ from autogen_agentchat.messages import TextMessage, HandoffMessage, ToolCallRequ
 from autogen_agentchat.conditions import TextMentionTermination, MaxMessageTermination
 from autogen_core import CancellationToken
 import os
-from ..tools.read_file_tool import read_file
+from ..tools.file_tool import read_file, store_file
 from ..tools.upload_json_tool import run_playwright_test
 
 
@@ -35,11 +35,6 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 FILES_DIR = os.path.join(PROJECT_ROOT, "knowledge_base")
 # use read_file tool to read the ETL JSON node documentation
 etl_json_instruction = read_file(os.path.join(FILES_DIR, "etl_ui_json_nodes.md"))
-
-def store_file(path: str, content: str):
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(content)
-    return f"File saved to {path}"
 
 class JSONGeneratorAgent(AssistantAgent):
     def __init__(self):
@@ -83,13 +78,13 @@ class JSONValidatorAgent(AssistantAgent):
             - FAILURE: If result string contains "错误"
 
             Response actions:
-            - If successful: Report "JSON validation PASSED - file uploaded successfully" and use transfer_to_user_proxy for final approval.
+            - If successful: Report "JSON validation PASSED - file uploaded successfully" and TERMINATE the workflow.
             - If failed: Report "JSON validation FAILED" with specific error details and use transfer_to_json_generator for corrections.
 
             """,
             description="Validates JSON using Playwright automation and web system upload simulation",
             tools=[run_playwright_test],
-            handoffs=["JSON_Generator", "User_Proxy"]
+            handoffs=["JSON_Generator"]
         )
 
 class QAAgent(AssistantAgent):
@@ -114,27 +109,17 @@ class QAAgent(AssistantAgent):
 
 async def get_team(user_input_func: Callable[[str, Optional[CancellationToken]], Awaitable[str]],) -> Swarm:
     """Initialize the team with the provided user input function."""
-    user_proxy = UserProxyAgent(
-    name="User_Proxy",
-    input_func=user_input_func,
-    description="Manage user approval and feedback",
-)
+
     text_termination_en = TextMentionTermination("TERMINATE")
     text_termination_cn = TextMentionTermination("终止对话")
-    text_termination_user = TextMentionTermination("APPROVE")
-    termination = text_termination_en | text_termination_cn | text_termination_user | MaxMessageTermination(40)
+    termination = text_termination_en | text_termination_cn | MaxMessageTermination(40)
 
     json_generator = JSONGeneratorAgent()
     qa_agent = QAAgent()
     json_validator = JSONValidatorAgent()
-    user_proxy = UserProxyAgent(
-        name="User_Proxy",
-        input_func=input,
-        description="Manage user approval and feedback",
-    )
-    
+
     team = Swarm(
-        participants=[json_generator, qa_agent, json_validator, user_proxy],
+        participants=[json_generator, qa_agent, json_validator],
         termination_condition=termination
     )
     

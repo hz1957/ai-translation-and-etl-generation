@@ -38,6 +38,11 @@ def read_file(filename: str) -> str:
     except Exception as e:
         return f"Error reading file '{filename}': {str(e)}"
 
+def store_file(path: str, content: str):
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+    return f"File saved to {path}"
+
 # def main():
 #     # 示例调用
 #     content = read_file("观远数据ETL_JSON节点说明文档.md")
