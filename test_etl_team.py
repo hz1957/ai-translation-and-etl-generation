@@ -5,26 +5,19 @@ ETL Team 测试脚本
 import asyncio
 import sys
 import os
+import json
+from typing import Any, Dict, Optional
+from autogen_agentchat.base import TaskResult
+from autogen_agentchat.messages import TextMessage
 
 # 添加项目根目录到 Python 路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from app.agents.etl_team import get_team
-
-async def user_input(msg: str, cancellation_token=None) -> str:
-    """模拟用户输入"""
-    print(f"\n[系统收到消息]: {msg}")
-    print("请输入您的回复 (输入 'APPROVE' 批准, '终止对话' 结束):")
-    return input("> ")
-
-async def main():
-    print("=== ETL Team 测试 ===")
-    print("这是一个用于生成 ETL JSON 配置的智能体团队")
-    print("团队成员: JSON_Generator, QA_Agent, JSON_Validator, User_Proxy")
-    print()
+async def test_etl_service():
+    """测试ETL JSON服务"""
+    from app.services.etl_json_service import generate_etl_json
     
-    # 获取团队实例
-    team = await get_team(user_input_func=user_input)
+    print("=== 测试ETL JSON服务 ===")
     
     # 测试任务
     test_task = """
@@ -149,22 +142,27 @@ async def main():
 
     """
     
-    print(f"开始执行任务: {test_task}")
-    print("=" * 50)
-    
     try:
-        # 运行团队
-        result = await team.run(
-            task=test_task
-        )
+        # 使用服务生成JSON
+        result = await generate_etl_json(test_task)
         
-        print("\n=== 任务完成 ===")
-        print(f"结果: {result}")
-        
+        if result and "error" not in result:
+            print("✅ ETL JSON服务测试成功")
+            print("\n=== 生成的JSON配置 ===")
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        else:
+            print("❌ ETL JSON服务测试失败")
+            print(f"错误: {result.get('error', 'Unknown error')}")
+            
     except Exception as e:
-        print(f"\n错误: {e}")
+        print(f"❌ 测试过程中发生错误: {e}")
         import traceback
         traceback.print_exc()
 
+
+def main():
+    # 测试ETL JSON服务
+    asyncio.run(test_etl_service())
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

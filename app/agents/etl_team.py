@@ -6,7 +6,7 @@ from autogen_agentchat.messages import TextMessage, HandoffMessage, ToolCallRequ
 from autogen_agentchat.conditions import TextMentionTermination, MaxMessageTermination
 from autogen_core import CancellationToken
 import os
-from ..tools.file_tool import read_file, store_file
+from ..tools.file_tool import read_file
 from ..tools.upload_json_tool import run_playwright_test
 
 
@@ -48,14 +48,16 @@ class JSONGeneratorAgent(AssistantAgent):
                 {etl_json_instruction}
                 # WORKFLOW:
                 1. According to the descriptions on input data, output data and transformation, select appropriate table(s) from the source data for generating the target table.
-                2. Generate a JSON file ONLY under {FILES_DIR} named "genai_etl_config.json" that represents the transformation.
-                3. If QA_Agent finds logic issues, revise based on specific feedback.
-                4. If JSON_Validator finds upload/validation issues, revise accordingly.
-                5. If you revised the file, store your revised JSON file under {FILES_DIR} named "genai_etl_config.json".
+                2. Generate JSON configuration and output it directly in the chat as a formatted JSON string. 
+                   IMPORTANT: Only include input tables in your JSON that you actually use for the transformation. 
+                   If you don't use a source table, completely exclude it from the JSON configuration.
+                3. If QA_Agent finds logic issues, revise based on specific feedback and output the revised JSON in chat.
+                4. If JSON_Validator finds upload/validation issues, revise accordingly and output the revised JSON in chat.
+                5. Always output the complete JSON configuration in your response.
                 """
             ),
             description="Generates and revises JSON transformation interfaces",
-            tools=[store_file],
+            tools=[],
             handoffs=["QA_Agent"],
             # model_client_stream=True,
         )
@@ -65,11 +67,11 @@ class JSONValidatorAgent(AssistantAgent):
         super().__init__(
             name="JSON_Validator",
             model_client=qwen3,
-            system_message=f"""You are the JSON validation agent responsible for testing JSON file uploads. Reply in Chinese.
+            system_message=f"""You are the JSON validation agent responsible for testing JSON data uploads. Reply in Chinese.
 
             Your process:
-            1. Receive JSON file name (e.g., genai_etl_config.json) from QA_Agent
-            2. Use run_playwright_test tool with the file name to upload the JSON file
+            1. Extract JSON data string from the chat conversation (look for JSON formatted text between ```json and ``` markers)
+            2. Use run_playwright_test tool with the extracted JSON data string to upload and test the JSON
             3. Analyze the returned result string from the upload test
             4. Determine success/failure based on result content
 
@@ -78,9 +80,10 @@ class JSONValidatorAgent(AssistantAgent):
             - FAILURE: If result string contains "错误"
 
             Response actions:
-            - If successful: Report "JSON validation PASSED - file uploaded successfully" and TERMINATE the workflow with "终止对话".
+            - If successful: Report "JSON validation PASSED - data uploaded successfully", output the original JSON data, and TERMINATE the workflow with "终止对话".
             - If failed: Report "JSON validation FAILED" with specific error details and use transfer_to_json_generator for corrections.
 
+            Important: Always extract the JSON data from the chat conversation before using run_playwright_test.
             """,
             description="Validates JSON using Playwright automation and web system upload simulation",
             tools=[run_playwright_test],
@@ -92,17 +95,28 @@ class QAAgent(AssistantAgent):
         super().__init__(
             name="QA_Agent",
             model_client=qwen3,
-            system_message=f"""You are the QA agent responsible for logic verification. Reply in Chinese.
-            Review JSON file named "genai_etl_config" under {FILES_DIR}.
-            Your responsibilities:
-            1. Check if input/output mappings match user specifications
-            2. Verify transformation logic is consistent with user demands
-            3. Decision:
-            - If logic is correct: provide JSON file name (e.g., genai_etl_config.json) to JSON_Validator to verify the JSON file.
-            - If NOT correct: specify mismatches and return to JSON_Generator for revision.
-
-            Do not approve unless the JSON perfectly matches user needs.""",
-            description="Performs QA check to ensure JSON logic matches user requirements",
+            system_message=f"""You are the QA agent responsible for checking if the transformation logic matches user requirements. Reply in Chinese.
+            
+            Your ONLY job is to verify that the JSON transformation addresses what the user requested.
+            
+            Simple process:
+            1. Look at the user's original request
+            2. Check if the JSON transformation logic addresses that request
+            3. If it matches the user's needs: forward to JSON_Validator for upload testing
+            4. If it doesn't match: briefly explain what's missing and return to JSON_Generator
+            
+            What to check:
+            - Are the right input datasets being used?
+            - Is the transformation logic doing what the user asked for?
+            - Are the output fields what the user requested?
+            
+            What NOT to check:
+            - Don't validate JSON structure (that's for JSON_Validator)
+            - Don't check technical implementation details
+            - Don't worry about minor formatting issues
+            
+            Be generous in approval - if the basic logic matches the user request, send it to validation.""",
+            description="Checks if transformation logic matches user requirements",
             handoffs=["JSON_Validator", "JSON_Generator"]
         )
 
@@ -112,7 +126,7 @@ async def get_team(user_input_func: Callable[[str, Optional[CancellationToken]],
 
     text_termination_en = TextMentionTermination("TERMINATE")
     text_termination_cn = TextMentionTermination("终止对话")
-    termination = text_termination_en | text_termination_cn | MaxMessageTermination(40)
+    termination = text_termination_en | text_termination_cn | MaxMessageTermination(10)
 
     json_generator = JSONGeneratorAgent()
     qa_agent = QAAgent()

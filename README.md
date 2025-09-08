@@ -115,26 +115,21 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "items": [
-    {
-      "from": "ZH",
-      "to": "EN",
-      "content": "你好世界"
-    },
-    {
-      "from": "EN",
-      "to": "FR",
-      "content": "good morning"
-    }
-  ]
+    "from": "ZH",
+                "to": "EN",
+                "items": [
+                    "你好世界",
+                    "这是一个测试"
+                ]
 }'
 ```
 
 **预期响应:**
 ```json
 {
-  "translated_map": {
-    "你好世界": "Hello World",
-    "good morning": "Bonjour"
-  }
+    "translated_map": {
+        "你好世界": "Hello World",
+        "这是一个测试": "This is a test"
+    }
 }
+```
