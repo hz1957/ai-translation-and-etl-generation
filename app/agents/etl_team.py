@@ -48,7 +48,7 @@ class JSONGeneratorAgent(AssistantAgent):
                 {etl_json_instruction}
                 # WORKFLOW:
                 1. According to the descriptions on input data, output data and transformation, select appropriate table(s) from the source data for generating the target table.
-                2. Generate a JSON file ONLY under {FILES_DIR} named "genai_etl_config" that represents the transformation.
+                2. Generate a JSON file ONLY under {FILES_DIR} named "genai_etl_config.json" that represents the transformation.
                 3. If QA_Agent finds logic issues, revise based on specific feedback.
                 4. If JSON_Validator finds upload/validation issues, revise accordingly.
                 5. If you revised the file, store your revised JSON file under {FILES_DIR} named "genai_etl_config.json".
