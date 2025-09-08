@@ -78,7 +78,7 @@ class JSONValidatorAgent(AssistantAgent):
             - FAILURE: If result string contains "错误"
 
             Response actions:
-            - If successful: Report "JSON validation PASSED - file uploaded successfully" and TERMINATE the workflow.
+            - If successful: Report "JSON validation PASSED - file uploaded successfully" and TERMINATE the workflow with "终止对话".
             - If failed: Report "JSON validation FAILED" with specific error details and use transfer_to_json_generator for corrections.
 
             """,
