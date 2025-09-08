@@ -97,7 +97,6 @@ async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
         
         # Check table compatibility with >= 0.86 confidence threshold
         if table_result['source_table'] == "Nothing Compatible" or table_result['confidence'] < 0.86:
-            print(f"Target table '{target_table['name']}' has no compatible source table (confidence: {table_result['confidence']:.3f})")
             source_table_name = table_result['source_table'] if table_result['source_table'] != "Nothing Compatible" else None
             return {
                 "targetTable": target_table['name'],
@@ -115,7 +114,6 @@ async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
         source_table = next((t for t in source_data['originalData']['tables']
                           if t['tableName'] == source_table_name), None)
         if not source_table:
-            print(f"Source table '{source_table_name}' not found in source data.")
             return {
                 "targetTable": target_table['name'],
                 "sourceTable": None,
@@ -130,7 +128,6 @@ async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
         # Initialize mappings for this table
         field_mappings = {}
         
-        print(f"Mapping target table '{target_table['name']}' to source table '{source_table_name}' (confidence: {table_result['confidence']:.3f})")
         # Create async function for field mapping within this table
         async def map_single_field(target_field):
             nonlocal total_fields
@@ -144,12 +141,10 @@ async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
             
             # Check field compatibility with >= 0.8 confidence threshold
             if field_result['source_field'] == "Nothing Compatible" or field_result['confidence'] < 0.8:
-                print(f"  Target field '{target_field['name']}' has no compatible source field (confidence: {field_result['confidence']:.3f})")
                 return None
             else:
                 nonlocal mapped_fields
                 mapped_fields += 1
-                print(f"  Target field '{target_field['name']}' matched to source: {field_result['source_field']} (confidence: {field_result['confidence']:.3f})")
                 return (target_field['name'], field_result['source_field'])
         
         # Create tasks for all fields in this table
