@@ -90,12 +90,13 @@ async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
         # Check table compatibility with >= 0.86 confidence threshold
         if table_result['source_table'] == "Nothing Compatible" or table_result['confidence'] < 0.86:
             print(f"Target table '{target_table['name']}' has no compatible source table (confidence: {table_result['confidence']:.3f})")
+            source_table_name = table_result['source_table'] if table_result['source_table'] != "Nothing Compatible" else None
             return {
                 "targetTable": target_table['name'],
                 "sourceTable": None,
                 "mappings": {},
                 "confidence": table_result['confidence'],
-                "description": f"No compatible source table (confidence < 0.86): {table_result['confidence']:.3f}"
+                "description": f"No compatible source table (confidence < 0.86): {source_table_name} with confidence {table_result['confidence']:.3f}"
             }
         
         # Found compatible table

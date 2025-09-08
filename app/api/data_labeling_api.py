@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from typing import Dict, List, Optional, Any
 import json
 import os
-from ..services.data_labeling import map_data_schemas
+from ..services.data_labeling_service import map_data_schemas
 from ..schemas import (
     SchemaMappingRequest, SchemaMappingResponse
 )
