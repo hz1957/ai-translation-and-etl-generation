@@ -80,8 +80,12 @@ async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
     total_fields = 0
     mapped_fields = 0
     
+    # Count all target fields from all target tables first
+    for target_table in target_schema['tables']:
+        total_fields += len(target_table['fields'])
+    
     async def process_table(target_table):
-        nonlocal total_tables, mapped_tables, total_fields, mapped_fields
+        nonlocal total_tables, mapped_tables, mapped_fields
         total_tables += 1
         logger.info(f"Processing target table: {target_table['name']}")
         target_table_info = f"Table: {target_table['name']}\n"
@@ -130,8 +134,6 @@ async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
         
         # Create async function for field mapping within this table
         async def map_single_field(target_field):
-            nonlocal total_fields
-            total_fields += 1
             logger.debug(f"Mapping field: {target_field['name']} in table: {target_table['name']}")
             field_result = await data_agent.map_field(
                 target_field_name=target_field['name'],
@@ -151,7 +153,7 @@ async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
         field_tasks = [map_single_field(target_field) for target_field in target_table['fields']]
         
         # Process fields with semaphore to limit concurrency and respect model limits
-        field_sem = asyncio.Semaphore(5)  # Limit to 5 concurrent field mappings per table
+        field_sem = asyncio.Semaphore(6)  # Limit to 5 concurrent field mappings per table
         
         async def limited_field_task(task):
             async with field_sem:
@@ -179,7 +181,7 @@ async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
     table_tasks = [process_table(target_table) for target_table in target_schema['tables']]
     
     # Process tables with semaphore to limit concurrency and respect model limits
-    sem = asyncio.Semaphore(3)  # Limit to 3 concurrent table mappings
+    sem = asyncio.Semaphore(5)  # Limit to 3 concurrent table mappings
     
     async def limited_task(task):
         async with sem:
