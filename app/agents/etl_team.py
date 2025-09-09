@@ -77,13 +77,12 @@ class DatasetSelectorAgent(AssistantAgent):
               ],
               "task_description": "User's original task description"
             }
-
+            
             IMPORTANT: Only include datasets that are actually needed for the transformation.
             """,
             description="Selects appropriate input datasets for transformation",
             handoffs=["JSON_Generator"]
         )
-
 
 class JSONGeneratorAgent(AssistantAgent):
     def __init__(self):
@@ -96,13 +95,13 @@ class JSONGeneratorAgent(AssistantAgent):
                 # GUIDELINES:
                 {etl_json_instruction}
                 # WORKFLOW:
-                1. According to the input data, output data and transformation, generate JSON configuration.
-                2. Output it directly in the chat as a formatted JSON string.
-                   IMPORTANT: Only include input tables in your JSON that you actually use for the transformation.
-                   If you don't use a source table, completely exclude it from the JSON configuration.
-                3. If QA_Agent finds logic issues, revise based on specific feedback and output the revised JSON in chat.
-                4. If JSON_Validator finds upload/validation issues, revise accordingly and output the revised JSON in chat.
-                5. Always output the complete JSON configuration in your response.
+                1. Only use fields that exist in the provided inputs. NEVER invent or hallucinate fields.
+                2. If a required field is not present in inputs, find the closest semantically matching field.
+                3. For example: if inputs have "年龄" but task asks for "AGE", use "年龄".
+                4. If inputs have "受试者" and "SUBJID", either can be used.
+                5. Output the complete JSON configuration directly in a ```json``` code block.
+                7. If QA_Agent finds logic issues, revise based on feedback and output complete JSON.
+                8. If JSON_Validator finds upload issues, revise and output complete JSON.
                 """
             ),
             description="Generates and revises JSON transformation interfaces",

@@ -105,22 +105,24 @@ docker run -d --name translate-service -p 5432:5432 --env-file .env.prod model-p
 ```
 - `--env-file .env.prod`: 将生产环境的配置文件加载到容器中。
 
-##  API 使用示例
+## API 使用示例
 
 您可以使用 `cURL` 或访问 `http://127.0.0.1:5432/docs` 来测试API。
 
+### 1. 翻译 API
+
 ```bash
 curl -X 'POST' \
-  'http://127.0.0.1:5432/translate' \
+  'http://127.0.0.1:5432/api/translate/translate' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
     "from": "ZH",
-                "to": "EN",
-                "items": [
-                    "你好世界",
-                    "这是一个测试"
-                ]
+    "to": "EN",
+    "items": [
+        "你好世界",
+        "这是一个测试"
+    ]
 }'
 ```
 
@@ -131,5 +133,98 @@ curl -X 'POST' \
         "你好世界": "Hello World",
         "这是一个测试": "This is a test"
     }
+}
+```
+
+### 2. 数据标注 API
+
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:5432/api/data-labeling/map-schemas' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "originalData": {
+      "tables": [
+        {
+          "tableName": "SUBJ",
+          "fields": [
+            {"fieldName": "SUBJID", "fieldType": "String", "fieldLabel": "受试者编号"},
+            {"fieldName": "AGE", "fieldType": "Number", "fieldLabel": "年龄"}
+          ],
+          "detailData": [
+            {"SUBJID": "001", "AGE": "25", "rowNumber": 1}
+          ]
+        }
+      ],
+      "totalTables": 1
+    },
+    "labelVersion": {
+      "versionId": "CDASH_V1_0",
+      "versionName": "CDASH标准标签库v1.0",
+      "description": "CDASH标准数据收集表格v1.0版本",
+      "createTime": "2024-01-01T00:00:00.000Z",
+      "tables": [
+        {
+          "name": "dm",
+          "description": "Demographics: contains information about the subjects",
+          "fields": [
+            {"name": "SUBJID", "type": "string", "description": "What is the subject identifier?"},
+            {"name": "AGE", "type": "integer", "description": "What is the subject'"'"'s age?"}
+          ]
+        }
+      ]
+    }
+  }'
+```
+
+**预期响应:**
+```json
+{
+  "success": true,
+  "errorMessage": null,
+  "standardVersion": {
+    "versionId": "CDASH_V1_0",
+    "versionName": "CDASH标准标签库v1.0"
+  },
+  "tableMappings": [
+    {
+      "targetTable": "dm",
+      "sourceTable": "SUBJ",
+      "mappings": {"SUBJID": "SUBJID", "AGE": "AGE"},
+      "confidence": 0.95,
+      "description": "高置信度映射，字段名称和类型完全匹配"
+    }
+  ],
+  "statistics": {
+    "totalTables": 1,
+    "mappedTables": 1,
+    "successRate": 1.0
+  }
+}
+```
+
+### 3. ETL JSON 生成 API
+
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:5432/api/etl-json/generate' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '请帮我生成一个 ETL 配置：输入数据：CDASH_AE（不良事件数据）和CDASH_DM（受试者数据），输出要求：找到受试者最新的一个不良事件，生成包含受试者、年龄和最新不良事件的输出'
+```
+
+**预期响应:**
+```json
+{
+  "uId": null,
+  "dataFlowId": "cdash_analysis_flow_1722166200000",
+  "domId": "clinical",
+  "name": "CDASH_受试者最新不良事件分析",
+  "description": "整合CDASH_DM（人口学）和CDASH_AE（不良事件）数据，获取每位受试者的年龄及其最新的一个不良事件名称",
+  "meta": [...],
+  "inputs": [...],
+  "outputs": [...],
+  "platform": "bi"
 }
 ```

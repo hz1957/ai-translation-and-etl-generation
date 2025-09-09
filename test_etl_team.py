@@ -6,55 +6,61 @@ import asyncio
 import sys
 import os
 import json
-import logging
-from typing import Any, Dict, Optional
 from autogen_agentchat.base import TaskResult
 from autogen_agentchat.messages import TextMessage
 
 # 添加项目根目录到 Python 路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# 设置日志
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('test_etl_team.log', encoding='utf-8'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
+# Remove logging configuration - use print only
 
 async def test_etl_service():
     """测试ETL JSON服务"""
-    from app.services.etl_json_service import generate_etl_json
+    # Import team directly
+    from app.agents.etl_team import get_team
     
-    logger.info("=== 开始测试ETL JSON服务 ===")
+    # Initialize team variable in outer scope
+    team = None
+    
+    print("=== 开始测试ETL JSON服务 ===")
     
     # 从文件读取测试任务
     with open('etl_request_1.json', 'r', encoding='utf-8') as f:
         test_task = json.load(f)
     
     try:
-        # 使用服务生成JSON
-        result = await generate_etl_json(test_task)
+        # 直接运行团队实例并获取流式输出
+        team = await get_team()
+        if team is None:
+            print("无法获取团队实例")
+            return
         
-        # 处理结果
-        if result and "error" not in result:
-            logger.info("✅ ETL JSON服务测试成功")
-            logger.info("\n=== 生成的JSON配置 ===")
-            logger.info(json.dumps(result, ensure_ascii=False, indent=2))
-        else:
-            logger.error("❌ ETL JSON服务测试失败")
-            logger.error(f"错误: {result.get('error', 'Unknown error')}")
+        # 转换任务描述为字符串
+        task_str = str(test_task)
+        
+        # 使用流式模式处理团队响应
+        result = None
+        async for message in team.run_stream(task=task_str):
+            # Output original stream message
+            print(message)
+            # Store the last message as result
+            result = message
             
+        # Print completion message
+        print("=== ETL JSON服务测试完成 ===")
+        return result
+        
     except Exception as e:
-        logger.exception(f"测试过程中发生错误: {e}")
-
+        print(f"测试过程中发生错误: {e}")
+        return None
 
 def main():
     # 测试ETL JSON服务
-    asyncio.run(test_etl_service())
+    result = asyncio.run(test_etl_service())
+    if result is None:
+        print("测试失败或未完成")
+    else:
+        print("测试成功完成")
 
 if __name__ == "__main__":
     main()
