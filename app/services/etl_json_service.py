@@ -69,12 +69,12 @@ async def _get_team():
     return _team
 
 
-async def generate_etl_json(task_description: str) -> Dict[str, Any]:
+async def generate_etl_json(task_description: Any) -> Dict[str, Any]:
     """
     生成ETL JSON配置的便捷函数
     
     Args:
-        task_description: ETL任务描述
+        task_description: ETL任务描述，可以是字符串或Pydantic模型
         
     Returns:
         JSON配置字典
@@ -89,8 +89,15 @@ async def generate_etl_json(task_description: str) -> Dict[str, Any]:
             logger.error("ETL团队未正确初始化")
             return {"error": "ETL team not initialized"}
         
+        # 转换任务描述为字符串
+        task_str = (
+            task_description.model_dump_json()
+            if hasattr(task_description, 'model_dump_json')
+            else str(task_description)
+        )
+        
         # 使用直接运行模式，避免流式处理的复杂性和错误
-        result = await team.run(task=task_description)
+        result = await team.run(task=task_str)
         
         # 从结果中提取JSON
         if hasattr(result, 'messages'):

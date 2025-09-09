@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from .config.logging import configure_logging
 from .api.endpoints import router as api_router
 from .api.data_labeling_api import router as data_annotation_router
+from .api.etl_json_api import router as etl_json_router
 from .handlers.exception_handlers import generic_exception_handler
 from .clients.http_client import lifespan
 
@@ -31,3 +32,4 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # --- 路由 ---
 app.include_router(api_router)
 app.include_router(data_annotation_router)
+app.include_router(etl_json_router)
