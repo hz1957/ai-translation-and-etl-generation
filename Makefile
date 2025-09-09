@@ -31,6 +31,11 @@ docker-build:
 	@echo "🐳 构建 Docker 镜像..."
 	@docker build -t model-platform .
 
+# 运行 Docker 容器
+docker-run:
+	@echo "🚀 运行 Docker 容器..."
+	@docker run -d --name translate-service -p 5432:5432 --env-file .env.prod model-platform
+
 # 显示帮助信息
 help:
 	@echo "可用命令:"

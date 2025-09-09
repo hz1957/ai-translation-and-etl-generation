@@ -21,15 +21,12 @@ from app.config.logging import configure_logging
 configure_logging()
 logger = logging.getLogger(__name__)
 
-# 全局团队实例
-_team = None
-
-
-async def _auto_approve(msg: str, cancellation_token=None) -> str:
-    """自动批准函数，用于服务模式"""
-    logger.info(f"Auto-approving message: {msg[:100]}...")
-    return "APPROVE"
-
+# 团队实例连接池
+_team_pool = []
+# 池中最大团队实例数
+_MAX_POOL_SIZE = 3
+# 用于团队实例池的锁
+_pool_lock = asyncio.Lock()
 
 def _extract_json_from_content(content) -> Optional[str]:
     """从消息内容中提取JSON字符串"""
@@ -62,11 +59,30 @@ def _extract_json_from_content(content) -> Optional[str]:
 
 
 async def _get_team():
-    """获取ETL团队实例（单例模式）"""
-    global _team
-    if _team is None:
-        _team = await get_team(user_input_func=_auto_approve)
-    return _team
+    """获取ETL团队实例（连接池模式）"""
+    global _team_pool
+    async with _pool_lock:
+        # 如果池中有可用实例，返回一个
+        if _team_pool:
+            team = _team_pool.pop()
+            logger.info(f"从连接池获取团队实例，当前池大小: {len(_team_pool)}")
+            return team
+    
+    # 创建新实例
+    team = await get_team()
+    logger.info(f"创建新的团队实例，当前池大小: {len(_team_pool)}")
+    return team
+
+
+async def _return_team(team):
+    """将团队实例返回到连接池"""
+    global _team_pool
+    async with _pool_lock:
+        if len(_team_pool) < _MAX_POOL_SIZE:
+            _team_pool.append(team)
+            logger.info(f"团队实例返回连接池，当前池大小: {len(_team_pool)}")
+        else:
+            logger.info("团队实例连接池已满，丢弃实例")
 
 
 async def generate_etl_json(task_description: Any) -> Dict[str, Any]:
@@ -96,8 +112,12 @@ async def generate_etl_json(task_description: Any) -> Dict[str, Any]:
             else str(task_description)
         )
         
-        # 使用直接运行模式，避免流式处理的复杂性和错误
-        result = await team.run(task=task_str)
+        # 使用直接运行模式
+        try:
+            result = await team.run(task=task_str)
+        finally:
+            # 无论成功或失败，都将团队实例返回连接池
+            await _return_team(team)
         
         # 从结果中提取JSON
         if hasattr(result, 'messages'):

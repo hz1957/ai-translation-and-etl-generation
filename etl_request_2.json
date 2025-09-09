@@ -1,0 +1,116 @@
+{
+  "etlLib": {
+    "name": "CDASH 输入数据",
+    "remark": "CDASH AE, LB, DM, MH 数据集",
+    "type": "INPUT",
+    "etlNum": 1
+  },
+  "tableList": [
+    {
+      "tableNameEn": "CDASH_AE",
+      "tableNameCn": "不良事件",
+      "FieldList": [
+        { "fieldName": "研究中心", "fieldType": "STRING", "fieldLabel": "研究中心" },
+        { "fieldName": "中心编号", "fieldType": "LONG", "fieldLabel": "中心编号" },
+        { "fieldName": "受试者", "fieldType": "STRING", "fieldLabel": "受试者" },
+        { "fieldName": "页面名称", "fieldType": "STRING", "fieldLabel": "页面名称" },
+        { "fieldName": "记录号", "fieldType": "LONG", "fieldLabel": "记录号" },
+        { "fieldName": "不良事件名称", "fieldType": "STRING", "fieldLabel": "不良事件名称" },
+        { "fieldName": "开始日期", "fieldType": "DATE", "fieldLabel": "开始日期" },
+        { "fieldName": "开始时间", "fieldType": "STRING", "fieldLabel": "开始时间" },
+        { "fieldName": "结束日期", "fieldType": "DATE", "fieldLabel": "结束日期" },
+        { "fieldName": "结束时间", "fieldType": "STRING", "fieldLabel": "结束时间" },
+        { "fieldName": "AE分类", "fieldType": "STRING", "fieldLabel": "AE分类" },
+        { "fieldName": "是否为严重不良事件", "fieldType": "STRING", "fieldLabel": "是否为严重不良事件" },
+        { "fieldName": "是否为限制性毒性事件", "fieldType": "STRING", "fieldLabel": "是否为限制性毒性事件" },
+        { "fieldName": "严重程度（CTCAE）", "fieldType": "STRING", "fieldLabel": "严重程度（CTCAE）" },
+        { "fieldName": "与研究用药的因果关系", "fieldType": "STRING", "fieldLabel": "与研究用药的因果关系" },
+        { "fieldName": "是否因严重不良事件退出试验", "fieldType": "STRING", "fieldLabel": "是否因严重不良事件退出试验" },
+        { "fieldName": "IrAE", "fieldType": "STRING", "fieldLabel": "IrAE" },
+        { "fieldName": "是否导致药物暂停", "fieldType": "STRING", "fieldLabel": "是否导致药物暂停" },
+        { "fieldName": "是否导致药物降低剂量", "fieldType": "STRING", "fieldLabel": "是否导致药物降低剂量" },
+        { "fieldName": "是否导致永久停药", "fieldType": "STRING", "fieldLabel": "是否导致永久停药" }
+      ]
+    },
+    {
+      "tableNameEn": "CDASH_LB",
+      "tableNameCn": "实验室检查",
+      "FieldList": [
+        { "fieldName": "研究中心", "fieldType": "STRING", "fieldLabel": "研究中心" },
+        { "fieldName": "中心编号", "fieldType": "LONG", "fieldLabel": "中心编号" },
+        { "fieldName": "受试者", "fieldType": "STRING", "fieldLabel": "受试者" },
+        { "fieldName": "访视名称", "fieldType": "STRING", "fieldLabel": "访视名称" },
+        { "fieldName": "访视OID", "fieldType": "STRING", "fieldLabel": "访视OID" },
+        { "fieldName": "页面名称", "fieldType": "STRING", "fieldLabel": "页面名称" },
+        { "fieldName": "记录号", "fieldType": "LONG", "fieldLabel": "记录号" },
+        { "fieldName": "采样日期", "fieldType": "DATE", "fieldLabel": "采样日期" },
+        { "fieldName": "检查项目", "fieldType": "STRING", "fieldLabel": "检查项目" },
+        { "fieldName": "检查结果", "fieldType": "STRING", "fieldLabel": "检查结果" },
+        { "fieldName": "单位", "fieldType": "STRING", "fieldLabel": "单位" },
+        { "fieldName": "下限", "fieldType": "DOUBLE", "fieldLabel": "下限" },
+        { "fieldName": "上限", "fieldType": "DOUBLE", "fieldLabel": "上限" },
+        { "fieldName": "基线数据", "fieldType": "DOUBLE", "fieldLabel": "基线数据" }
+      ]
+    },
+    {
+      "tableNameEn": "CDASH_DM",
+      "tableNameCn": "人口学",
+      "FieldList": [
+        { "fieldName": "研究中心", "fieldType": "STRING", "fieldLabel": "研究中心" },
+        { "fieldName": "中心编号", "fieldType": "LONG", "fieldLabel": "中心编号" },
+        { "fieldName": "项目", "fieldType": "STRING", "fieldLabel": "项目" },
+        { "fieldName": "方案编号", "fieldType": "STRING", "fieldLabel": "方案编号" },
+        { "fieldName": "受试者", "fieldType": "STRING", "fieldLabel": "受试者" },
+        { "fieldName": "受试者状态", "fieldType": "STRING", "fieldLabel": "受试者状态" },
+        { "fieldName": "页面名称", "fieldType": "STRING", "fieldLabel": "页面名称" },
+        { "fieldName": "出生日期", "fieldType": "DATE", "fieldLabel": "出生日期" },
+        { "fieldName": "年龄", "fieldType": "LONG", "fieldLabel": "年龄" },
+        { "fieldName": "年龄_UNIT", "fieldType": "STRING", "fieldLabel": "年龄_UNIT" },
+        { "fieldName": "性别", "fieldType": "STRING", "fieldLabel": "性别" },
+        { "fieldName": "民族", "fieldType": "STRING", "fieldLabel": "民族" },
+        { "fieldName": "身高", "fieldType": "LONG", "fieldLabel": "身高" },
+        { "fieldName": "身高_UNIT", "fieldType": "STRING", "fieldLabel": "身高_UNIT" },
+        { "fieldName": "WEIGHT", "fieldType": "DOUBLE", "fieldLabel": "WEIGHT" },
+        { "fieldName": "WEIGHT_UNIT", "fieldType": "STRING", "fieldLabel": "WEIGHT_UNIT" },
+        { "fieldName": "受试者情况", "fieldType": "STRING", "fieldLabel": "受试者情况" },
+        { "fieldName": "年龄分组（n, %）", "fieldType": "STRING", "fieldLabel": "年龄分组（n, %）" },
+        { "fieldName": "AGE-N(Nmiss)", "fieldType": "LONG", "fieldLabel": "AGE-N(Nmiss)" },
+        { "fieldName": "AGE-Mean±Std", "fieldType": "LONG", "fieldLabel": "AGE-Mean±Std" },
+        { "fieldName": "AGE-M (Q1~Q3)", "fieldType": "LONG", "fieldLabel": "AGE-M (Q1~Q3)" },
+        { "fieldName": "AGE-Min~Max", "fieldType": "LONG", "fieldLabel": "AGE-Min~Max" },
+        { "fieldName": "诊断", "fieldType": "STRING", "fieldLabel": "诊断" },
+        { "fieldName": "现阶段分期", "fieldType": "STRING", "fieldLabel": "现阶段分期" },
+        { "fieldName": "ECOG评分", "fieldType": "LONG", "fieldLabel": "ECOG评分" },
+        { "fieldName": "转移器官数量", "fieldType": "STRING", "fieldLabel": "转移器官数量" },
+        { "fieldName": "PD-L1表达状态", "fieldType": "STRING", "fieldLabel": "PD-L1表达状态" }
+      ]
+    },
+    {
+      "tableNameEn": "CDASH_MH",
+      "tableNameCn": "病史",
+      "FieldList": [
+        { "fieldName": "研究中心", "fieldType": "STRING", "fieldLabel": "研究中心" },
+        { "fieldName": "中心编号", "fieldType": "LONG", "fieldLabel": "中心编号" },
+        { "fieldName": "受试者", "fieldType": "STRING", "fieldLabel": "受试者" },
+        { "fieldName": "页面名称", "fieldType": "STRING", "fieldLabel": "页面名称" },
+        { "fieldName": "记录号", "fieldType": "LONG", "fieldLabel": "记录号" },
+        { "fieldName": "疾病名称", "fieldType": "STRING", "fieldLabel": "疾病名称" },
+        { "fieldName": "开始日期", "fieldType": "STRING", "fieldLabel": "开始日期" },
+        { "fieldName": "结束日期", "fieldType": "DATE", "fieldLabel": "结束日期" },
+        { "fieldName": "是否持续", "fieldType": "STRING", "fieldLabel": "是否持续" }
+      ]
+    }
+  ],
+  "recordList": [],
+  "dataFlowId": "",
+  "inputParentDirId": "",
+  "output": {
+    "id": "",
+    "name": "CDASH_Standardized",
+    "type": "TABLE",
+    "outputDsName": "CDASH_Output",
+    "outputDsDesc": "AE, LB, DM, MH 整合输出",
+    "parentDirId": ""
+  },
+  "task_description":"请选择合适的input_dataset(table), 生成一个output, 包含受试者, 年龄, 和他的最新的一个不良事件, 以及该不良事件对应的时间."
+}

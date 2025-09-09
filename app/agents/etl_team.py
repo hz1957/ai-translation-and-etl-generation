@@ -36,6 +36,55 @@ FILES_DIR = os.path.join(PROJECT_ROOT, "knowledge_base")
 # use read_file tool to read the ETL JSON node documentation
 etl_json_instruction = read_file(os.path.join(FILES_DIR, "etl_ui_json_nodes.md"))
 
+class DatasetSelectorAgent(AssistantAgent):
+    def __init__(self):
+        super().__init__(
+            name="Dataset_Selector",
+            model_client=qwen3,
+            system_message="""You are a dataset selection agent responsible for identifying appropriate input datasets from user requests.
+            
+            Your only job is to:
+            1. Analyze the user's task description
+            2. Identify which input datasets are needed for the transformation
+            3. Create a minimal JSON structure with only the required datasets
+            4. Hand off to JSON_Generator for actual JSON generation
+            
+            Output format: Return a JSON object with meta and inputs fields containing only the datasets that will be used.
+            Example:
+            {
+              "meta": [
+                {
+                  "type": "INPUT_DATASET",
+                  "name": "CDASH_AE",
+                  "displayType": "CSV",
+                  "preview": { "scope": "ALL", "config": {} },
+                  "cascadeUpdateEnabled": false,
+                  "inputDsId": "example_id",
+                  "id": "id_123",
+                  "position": { "x": 0, "y": 0 },
+                  "sources": []
+                }
+              ],
+              "inputs": [
+                {
+                  "dsId": "example_id",
+                  "name": "CDASH_AE",
+                  "fields": [
+                    { "name": "字段1", "type": "STRING", "seqNo": 0 },
+                    { "name": "字段2", "type": "DATE", "seqNo": 1 }
+                  ]
+                }
+              ],
+              "task_description": "User's original task description"
+            }
+
+            IMPORTANT: Only include datasets that are actually needed for the transformation.
+            """,
+            description="Selects appropriate input datasets for transformation",
+            handoffs=["JSON_Generator"]
+        )
+
+
 class JSONGeneratorAgent(AssistantAgent):
     def __init__(self):
         super().__init__(
@@ -43,13 +92,13 @@ class JSONGeneratorAgent(AssistantAgent):
             model_client=qwen3,
             system_message=(
                 f"""
-                You are an expert JSON transformation generator. Reply in Chinese.
+                You are an expert JSON transformation generator.
                 # GUIDELINES:
                 {etl_json_instruction}
                 # WORKFLOW:
-                1. According to the descriptions on input data, output data and transformation, select appropriate table(s) from the source data for generating the target table.
-                2. Generate JSON configuration and output it directly in the chat as a formatted JSON string. 
-                   IMPORTANT: Only include input tables in your JSON that you actually use for the transformation. 
+                1. According to the input data, output data and transformation, generate JSON configuration.
+                2. Output it directly in the chat as a formatted JSON string.
+                   IMPORTANT: Only include input tables in your JSON that you actually use for the transformation.
                    If you don't use a source table, completely exclude it from the JSON configuration.
                 3. If QA_Agent finds logic issues, revise based on specific feedback and output the revised JSON in chat.
                 4. If JSON_Validator finds upload/validation issues, revise accordingly and output the revised JSON in chat.
@@ -67,7 +116,7 @@ class JSONValidatorAgent(AssistantAgent):
         super().__init__(
             name="JSON_Validator",
             model_client=qwen3,
-            system_message=f"""You are the JSON validation agent responsible for testing JSON data uploads. Reply in Chinese.
+            system_message=f"""You are the JSON validation agent responsible for testing JSON data uploads.
 
             Your process:
             1. Extract JSON data string from the chat conversation (look for JSON formatted text between ```json and ``` markers)
@@ -80,7 +129,7 @@ class JSONValidatorAgent(AssistantAgent):
             - FAILURE: If result string contains "错误"
 
             Response actions:
-            - If successful: Report "JSON validation PASSED - data uploaded successfully", output the original JSON data, and TERMINATE the workflow with "终止对话".
+            - If successful: Report "JSON validation PASSED - data uploaded successfully", output the original JSON data, and TERMINATE the workflow with "TERMINATE".
             - If failed: Report "JSON validation FAILED" with specific error details and use transfer_to_json_generator for corrections.
 
             Important: Always extract the JSON data from the chat conversation before using run_playwright_test.
@@ -95,7 +144,7 @@ class QAAgent(AssistantAgent):
         super().__init__(
             name="QA_Agent",
             model_client=qwen3,
-            system_message=f"""You are the QA agent responsible for checking if the transformation logic matches user requirements. Reply in Chinese.
+            system_message=f"""You are the QA agent responsible for checking if the transformation logic matches user requirements.
             
             Your ONLY job is to verify that the JSON transformation addresses what the user requested.
             
@@ -121,19 +170,20 @@ class QAAgent(AssistantAgent):
         )
 
 
-async def get_team(user_input_func: Callable[[str, Optional[CancellationToken]], Awaitable[str]],) -> Swarm:
+async def get_team() -> Swarm:
     """Initialize the team with the provided user input function."""
 
     text_termination_en = TextMentionTermination("TERMINATE")
     text_termination_cn = TextMentionTermination("终止对话")
     termination = text_termination_en | text_termination_cn | MaxMessageTermination(10)
 
+    dataset_selector = DatasetSelectorAgent()
     json_generator = JSONGeneratorAgent()
     qa_agent = QAAgent()
     json_validator = JSONValidatorAgent()
 
     team = Swarm(
-        participants=[json_generator, qa_agent, json_validator],
+        participants=[dataset_selector, json_generator, qa_agent, json_validator],
         termination_condition=termination
     )
     
