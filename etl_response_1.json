@@ -1,0 +1,322 @@
+{
+    "uId": null,
+    "dataFlowId": "mh_ae_join_flow_1722165600000",
+    "domId": "clinical",
+    "name": "病史与不良事件左连接",
+    "description": "基于CDASH_MH和CDASH_AE表执行左连接操作，以病史记录为主表关联不良事件记录。关联条件为同一受试者(SUBJID)且病史名称(MHTERM)与不良事件名称(AETERM)匹配。输出结果包含病史的基础信息以及关联的AE名称和AE开始时间字段。",
+    "meta": [
+        {
+            "type": "INPUT_DATASET",
+            "name": "CDASH_MH",
+            "displayType": "DATAFLOW",
+            "inputDsId": "cdash_mh_dataset_id",
+            "cascadeUpdateEnabled": true,
+            "relativeFieldAlias": {
+                "SUBJID": "受试者",
+                "MHTERM": "病史名称",
+                "MHSTDAT": "病史开始时间",
+                "MHENDAT": "病史结束时间",
+                "MHONGO": "病史是否持续"
+            },
+            "position": {
+                "x": 100,
+                "y": 100
+            },
+            "id": "input_mh",
+            "sources": []
+        },
+        {
+            "type": "INPUT_DATASET",
+            "name": "CDASH_AE",
+            "displayType": "DATAFLOW",
+            "inputDsId": "cdash_ae_dataset_id",
+            "cascadeUpdateEnabled": true,
+            "relativeFieldAlias": {
+                "SUBJID": "受试者",
+                "AETERM": "不良事件名称",
+                "AESTDAT": "AE开始时间"
+            },
+            "position": {
+                "x": 100,
+                "y": 300
+            },
+            "id": "input_ae",
+            "sources": []
+        },
+        {
+            "type": "JOIN_DATA",
+            "name": "病史与不良事件左连接",
+            "id": "join_mh_ae",
+            "dataFusion": {
+                "dataSources": [
+                    {
+                        "key": "input_mh"
+                    },
+                    {
+                        "key": "input_ae"
+                    }
+                ],
+                "fusionType": "COLUMN",
+                "columnFuses": [
+                    {
+                        "leftKey": "input_mh",
+                        "rightKey": "input_ae",
+                        "joinType": "LEFT_OUTER",
+                        "predicates": [
+                            {
+                                "leftColumn": "SUBJID",
+                                "rightColumn": "SUBJID"
+                            },
+                            {
+                                "leftColumn": "MHTERM",
+                                "rightColumn": "AETERM"
+                            }
+                        ]
+                    }
+                ],
+                "selectedColumns": [
+                    {
+                        "name": "SUBJID",
+                        "dsKey": "input_mh",
+                        "newName": "SUBJID",
+                        "isIgnored": false
+                    },
+                    {
+                        "name": "MHTERM",
+                        "dsKey": "input_mh",
+                        "newName": "MHTERM",
+                        "isIgnored": false
+                    },
+                    {
+                        "name": "MHSTDAT",
+                        "dsKey": "input_mh",
+                        "newName": "MHSTDAT",
+                        "isIgnored": false
+                    },
+                    {
+                        "name": "MHENDAT",
+                        "dsKey": "input_mh",
+                        "newName": "MHENDAT",
+                        "isIgnored": false
+                    },
+                    {
+                        "name": "MHONGO",
+                        "dsKey": "input_mh",
+                        "newName": "MHONGO",
+                        "isIgnored": false
+                    },
+                    {
+                        "name": "AETERM",
+                        "dsKey": "input_ae",
+                        "newName": "AETERM",
+                        "isIgnored": false
+                    },
+                    {
+                        "name": "AESTDAT",
+                        "dsKey": "input_ae",
+                        "newName": "AESTDAT",
+                        "isIgnored": false
+                    }
+                ]
+            },
+            "position": {
+                "x": 300,
+                "y": 200
+            },
+            "sources": [
+                "input_mh",
+                "input_ae"
+            ]
+        },
+        {
+            "type": "SELECT_COLUMNS",
+            "name": "选择输出字段",
+            "id": "select_output_columns",
+            "columns": [
+                {
+                    "name": "SUBJID",
+                    "dsKey": "join_mh_ae",
+                    "newName": "SUBJID",
+                    "isIgnored": false
+                },
+                {
+                    "name": "AETERM",
+                    "dsKey": "join_mh_ae",
+                    "newName": "AETERM",
+                    "isIgnored": false
+                },
+                {
+                    "name": "AESTDAT",
+                    "dsKey": "join_mh_ae",
+                    "newName": "AESTDAT",
+                    "isIgnored": false
+                },
+                {
+                    "name": "MHTERM",
+                    "dsKey": "join_mh_ae",
+                    "newName": "MHTERM",
+                    "isIgnored": false
+                },
+                {
+                    "name": "MHSTDAT",
+                    "dsKey": "join_mh_ae",
+                    "newName": "MHSTDAT",
+                    "isIgnored": false
+                },
+                {
+                    "name": "MHENDAT",
+                    "dsKey": "join_mh_ae",
+                    "newName": "MHENDAT",
+                    "isIgnored": false
+                },
+                {
+                    "name": "MHONGO",
+                    "dsKey": "join_mh_ae",
+                    "newName": "MHONGO",
+                    "isIgnored": false
+                }
+            ],
+            "position": {
+                "x": 500,
+                "y": 200
+            },
+            "sources": [
+                "join_mh_ae"
+            ]
+        },
+        {
+            "type": "OUTPUT_DATASET",
+            "name": "MH_AE_Joined_Result",
+            "outputDsName": "CDASH_MH_AE_Output",
+            "parentDirId": "output_folder_id",
+            "dataSource": {
+                "created": true,
+                "dsId": "output_ds_mh_ae_id",
+                "name": "CDASH_MH_AE_Output",
+                "dirPath": [
+                    {
+                        "dirId": "root_dir",
+                        "dirName": "根目录"
+                    },
+                    {
+                        "dirId": "clinical_dir",
+                        "dirName": "临床数据"
+                    },
+                    {
+                        "dirId": "analysis_dir",
+                        "dirName": "分析结果"
+                    }
+                ]
+            },
+            "position": {
+                "x": 700,
+                "y": 200
+            },
+            "sources": [
+                "select_output_columns"
+            ]
+        }
+    ],
+    "inputs": [
+        {
+            "dsId": "cdash_mh_dataset_id",
+            "name": "CDASH_MH",
+            "fields": [
+                {
+                    "name": "SUBJID",
+                    "type": "STRING",
+                    "seqNo": 0
+                },
+                {
+                    "name": "MHTERM",
+                    "type": "STRING",
+                    "seqNo": 1
+                },
+                {
+                    "name": "MHSTDAT",
+                    "type": "DATE",
+                    "seqNo": 2
+                },
+                {
+                    "name": "MHENDAT",
+                    "type": "DATE",
+                    "seqNo": 3
+                },
+                {
+                    "name": "MHONGO",
+                    "type": "STRING",
+                    "seqNo": 4
+                }
+            ]
+        },
+        {
+            "dsId": "cdash_ae_dataset_id",
+            "name": "CDASH_AE",
+            "fields": [
+                {
+                    "name": "SUBJID",
+                    "type": "STRING",
+                    "seqNo": 0
+                },
+                {
+                    "name": "AETERM",
+                    "type": "STRING",
+                    "seqNo": 1
+                },
+                {
+                    "name": "AESTDAT",
+                    "type": "DATE",
+                    "seqNo": 2
+                }
+            ]
+        }
+    ],
+    "outputs": [
+        {
+            "id": "output_ds_mh_ae_id",
+            "name": "CDASH_MH_AE_Output",
+            "type": "TABLE",
+            "outputDsName": "CDASH_MH_AE_Output",
+            "outputDsDesc": "病史与不良事件关联结果",
+            "parentDirId": "output_folder_id",
+            "fieldList": [
+                {
+                    "fieldName": "SUBJID",
+                    "fieldType": "STRING",
+                    "fieldLabel": "受试者"
+                },
+                {
+                    "fieldName": "AETERM",
+                    "fieldType": "STRING",
+                    "fieldLabel": "AE名称"
+                },
+                {
+                    "fieldName": "AESTDAT",
+                    "fieldType": "DATE",
+                    "fieldLabel": "AE开始时间"
+                },
+                {
+                    "fieldName": "MHTERM",
+                    "fieldType": "STRING",
+                    "fieldLabel": "病史名称"
+                },
+                {
+                    "fieldName": "MHSTDAT",
+                    "fieldType": "DATE",
+                    "fieldLabel": "病史开始时间"
+                },
+                {
+                    "fieldName": "MHENDAT",
+                    "fieldType": "DATE",
+                    "fieldLabel": "病史结束时间"
+                },
+                {
+                    "fieldName": "MHONGO",
+                    "fieldType": "STRING",
+                    "fieldLabel": "病史是否持续"
+                }
+            ]
+        }
+    ],
+    "platform": "bi"
+}

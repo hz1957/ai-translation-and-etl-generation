@@ -2,7 +2,13 @@ from ..agents.data_agent import DataAnnotationAgent as DataAgent
 import asyncio
 import json
 import os
-from typing import Dict, Any
+from typing import Dict, Any, List, Tuple
+from app.config.logging import configure_logging
+import logging
+
+# Configure logging for this module
+configure_logging()
+logger = logging.getLogger(__name__)
 
 def format_source_table_desc(table):
     """Format a single source table description for LLM prompting."""
@@ -22,7 +28,7 @@ def format_source_table_desc(table):
     table_desc += "\n"
     return table_desc
 
-async def map_data_schemas(source_data: Dict[str, Any]):
+async def map_data_schemas(source_data: Dict[str, Any]) -> Dict[str, Any]:
     """Map source data tables and fields to target schema using semantic analysis.
     
     Args:
@@ -46,6 +52,7 @@ async def map_data_schemas(source_data: Dict[str, Any]):
     # Extract descriptions for all source tables
     source_tables_desc = ""
     for table in source_data['originalData']['tables']:
+        # Use the existing format_source_table_desc function which already includes one detail data row
         source_tables_desc += format_source_table_desc(table)
     
     # Result structure
@@ -73,9 +80,14 @@ async def map_data_schemas(source_data: Dict[str, Any]):
     total_fields = 0
     mapped_fields = 0
     
+    # Count all target fields from all target tables first
+    for target_table in target_schema['tables']:
+        total_fields += len(target_table['fields'])
+    
     async def process_table(target_table):
-        nonlocal total_tables, mapped_tables, total_fields, mapped_fields
+        nonlocal total_tables, mapped_tables, mapped_fields
         total_tables += 1
+        logger.info(f"Processing target table: {target_table['name']}")
         target_table_info = f"Table: {target_table['name']}\n"
         target_table_info += "Fields:\n"
         for field in target_table['fields']:
@@ -89,13 +101,13 @@ async def map_data_schemas(source_data: Dict[str, Any]):
         
         # Check table compatibility with >= 0.86 confidence threshold
         if table_result['source_table'] == "Nothing Compatible" or table_result['confidence'] < 0.86:
-            print(f"Target table '{target_table['name']}' has no compatible source table (confidence: {table_result['confidence']:.3f})")
+            source_table_name = table_result['source_table'] if table_result['source_table'] != "Nothing Compatible" else None
             return {
                 "targetTable": target_table['name'],
                 "sourceTable": None,
                 "mappings": {},
                 "confidence": table_result['confidence'],
-                "description": f"No compatible source table (confidence < 0.86): {table_result['confidence']:.3f}"
+                "description": f"No compatible source table (confidence < 0.86): {source_table_name} with confidence {table_result['confidence']:.3f}"
             }
         
         # Found compatible table
@@ -106,7 +118,6 @@ async def map_data_schemas(source_data: Dict[str, Any]):
         source_table = next((t for t in source_data['originalData']['tables']
                           if t['tableName'] == source_table_name), None)
         if not source_table:
-            print(f"Source table '{source_table_name}' not found in source data.")
             return {
                 "targetTable": target_table['name'],
                 "sourceTable": None,
@@ -121,11 +132,9 @@ async def map_data_schemas(source_data: Dict[str, Any]):
         # Initialize mappings for this table
         field_mappings = {}
         
-        print(f"Mapping target table '{target_table['name']}' to source table '{source_table_name}' (confidence: {table_result['confidence']:.3f})")
         # Create async function for field mapping within this table
         async def map_single_field(target_field):
-            nonlocal total_fields
-            total_fields += 1
+            logger.debug(f"Mapping field: {target_field['name']} in table: {target_table['name']}")
             field_result = await data_agent.map_field(
                 target_field_name=target_field['name'],
                 target_field_desc=target_field.get('description', 'No description provided'),
@@ -134,17 +143,25 @@ async def map_data_schemas(source_data: Dict[str, Any]):
             
             # Check field compatibility with >= 0.8 confidence threshold
             if field_result['source_field'] == "Nothing Compatible" or field_result['confidence'] < 0.8:
-                print(f"  Target field '{target_field['name']}' has no compatible source field (confidence: {field_result['confidence']:.3f})")
                 return None
             else:
                 nonlocal mapped_fields
                 mapped_fields += 1
-                print(f"  Target field '{target_field['name']}' matched to source: {field_result['source_field']} (confidence: {field_result['confidence']:.3f})")
                 return (target_field['name'], field_result['source_field'])
         
-        # Create tasks for all fields in this table and run them concurrently
+        # Create tasks for all fields in this table
         field_tasks = [map_single_field(target_field) for target_field in target_table['fields']]
-        field_results = await asyncio.gather(*field_tasks)
+        
+        # Process fields with semaphore to limit concurrency and respect model limits
+        field_sem = asyncio.Semaphore(6)  # Limit to 5 concurrent field mappings per table
+        
+        async def limited_field_task(task):
+            async with field_sem:
+                return await task
+        
+        # Apply concurrency limit to field tasks
+        limited_field_tasks = [limited_field_task(task) for task in field_tasks]
+        field_results = await asyncio.gather(*limited_field_tasks)
         
         # Process the results and build the field mappings dictionary
         for result in field_results:
@@ -160,9 +177,19 @@ async def map_data_schemas(source_data: Dict[str, Any]):
             "description": f"Mapped table with confidence: {table_result['confidence']:.3f}"
         }
     
-    # Create tasks for all target tables and run them concurrently
+    # Create tasks for all target tables
     table_tasks = [process_table(target_table) for target_table in target_schema['tables']]
-    table_mappings = await asyncio.gather(*table_tasks)
+    
+    # Process tables with semaphore to limit concurrency and respect model limits
+    sem = asyncio.Semaphore(5)  # Limit to 3 concurrent table mappings
+    
+    async def limited_task(task):
+        async with sem:
+            return await task
+    
+    # Apply concurrency limit to table tasks
+    limited_table_tasks = [limited_task(task) for task in table_tasks]
+    table_mappings = await asyncio.gather(*limited_table_tasks)
     
     # Add all table mappings to results
     for table_mapping in table_mappings:

@@ -5,7 +5,7 @@ from ..services.llm_service import translate_list_to_map, translation_cache
 from ..monitoring.llm_monitoring import get_llm_stats
 from fastapi.responses import JSONResponse, FileResponse
 
-router = APIRouter(prefix="/api/model-platform")
+router = APIRouter(prefix="/api/translate")
 
 @router.get("/dashboard", include_in_schema=False)
 async def get_dashboard():

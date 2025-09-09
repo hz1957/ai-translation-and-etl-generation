@@ -24,7 +24,16 @@ test('观远数据导出操作', async ({ page }) => {
 
     // 关键步骤: 文件上传和验证
     const fileInput = page.getByLabel('导入').locator('input[type="file"]');
-    await fileInput.setInputFiles("__JSON_FILE_PLACEHOLDER__");
+    
+    // 从环境变量获取JSON数据并转换为buffer
+    const jsonData = process.env.JSON_DATA || '{}';
+    const buffer = Buffer.from(jsonData, 'utf-8');
+    
+    await fileInput.setInputFiles({
+        name: 'agent-upload.json',
+        mimeType: 'application/json',
+        buffer
+    });
 
     // 等待上传处理
     await page.waitForTimeout(3000);

@@ -1,0 +1,20 @@
+{
+  "name": "model-platform-dev",
+  "version": "1.0.0",
+  "description": "供数统服务调用的模型服务",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@10.22.31.16:data-statistics/model-platform.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}

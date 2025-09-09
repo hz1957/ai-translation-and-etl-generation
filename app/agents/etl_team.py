@@ -6,7 +6,7 @@ from autogen_agentchat.messages import TextMessage, HandoffMessage, ToolCallRequ
 from autogen_agentchat.conditions import TextMentionTermination, MaxMessageTermination
 from autogen_core import CancellationToken
 import os
-from ..tools.read_file_tool import read_file
+from ..tools.file_tool import read_file
 from ..tools.upload_json_tool import run_playwright_test
 
 
@@ -36,10 +36,53 @@ FILES_DIR = os.path.join(PROJECT_ROOT, "knowledge_base")
 # use read_file tool to read the ETL JSON node documentation
 etl_json_instruction = read_file(os.path.join(FILES_DIR, "etl_ui_json_nodes.md"))
 
-def store_file(path: str, content: str):
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(content)
-    return f"File saved to {path}"
+class DatasetSelectorAgent(AssistantAgent):
+    def __init__(self):
+        super().__init__(
+            name="Dataset_Selector",
+            model_client=qwen3,
+            system_message="""You are a dataset selection agent responsible for identifying appropriate input datasets from user requests.
+            
+            Your only job is to:
+            1. Analyze the user's task description
+            2. Identify which input datasets are needed for the transformation
+            3. Create a minimal JSON structure with only the required datasets
+            4. Hand off to JSON_Generator for actual JSON generation
+            
+            Output format: Return a JSON object with meta and inputs fields containing only the datasets that will be used.
+            Example:
+            {
+              "meta": [
+                {
+                  "type": "INPUT_DATASET",
+                  "name": "CDASH_AE",
+                  "displayType": "CSV",
+                  "preview": { "scope": "ALL", "config": {} },
+                  "cascadeUpdateEnabled": false,
+                  "inputDsId": "example_id",
+                  "id": "id_123",
+                  "position": { "x": 0, "y": 0 },
+                  "sources": []
+                }
+              ],
+              "inputs": [
+                {
+                  "dsId": "example_id",
+                  "name": "CDASH_AE",
+                  "fields": [
+                    { "name": "字段1", "type": "STRING", "seqNo": 0 },
+                    { "name": "字段2", "type": "DATE", "seqNo": 1 }
+                  ]
+                }
+              ],
+              "task_description": "User's original task description"
+            }
+            
+            IMPORTANT: Only include datasets that are actually needed for the transformation.
+            """,
+            description="Selects appropriate input datasets for transformation",
+            handoffs=["JSON_Generator"]
+        )
 
 class JSONGeneratorAgent(AssistantAgent):
     def __init__(self):
@@ -48,19 +91,21 @@ class JSONGeneratorAgent(AssistantAgent):
             model_client=qwen3,
             system_message=(
                 f"""
-                You are an expert JSON transformation generator. Reply in Chinese.
+                You are an expert JSON transformation generator.
                 # GUIDELINES:
                 {etl_json_instruction}
                 # WORKFLOW:
-                1. According to the descriptions on input data, output data and transformation, select appropriate table(s) from the source data for generating the target table.
-                2. Generate a JSON file ONLY under {FILES_DIR} named "genai_etl_config" that represents the transformation.
-                3. If QA_Agent finds logic issues, revise based on specific feedback.
-                4. If JSON_Validator finds upload/validation issues, revise accordingly.
-                5. If you revised the file, store your revised JSON file under {FILES_DIR} named "genai_etl_config".
+                1. Only use fields that exist in the provided inputs. NEVER invent or hallucinate fields.
+                2. If a required field is not present in inputs, find the closest semantically matching field.
+                3. For example: if inputs have "年龄" but task asks for "AGE", use "年龄".
+                4. If inputs have "受试者" and "SUBJID", either can be used.
+                5. Output the complete JSON configuration directly in a ```json``` code block.
+                7. If QA_Agent finds logic issues, revise based on feedback and output complete JSON.
+                8. If JSON_Validator finds upload issues, revise and output complete JSON.
                 """
             ),
             description="Generates and revises JSON transformation interfaces",
-            tools=[store_file],
+            tools=[],
             handoffs=["QA_Agent"],
             # model_client_stream=True,
         )
@@ -70,11 +115,11 @@ class JSONValidatorAgent(AssistantAgent):
         super().__init__(
             name="JSON_Validator",
             model_client=qwen3,
-            system_message=f"""You are the JSON validation agent responsible for testing JSON file uploads. Reply in Chinese.
+            system_message=f"""You are the JSON validation agent responsible for testing JSON data uploads.
 
             Your process:
-            1. Receive JSON file name (e.g., genai_etl_config.json) from QA_Agent
-            2. Use run_playwright_test tool with the file name to upload the JSON file
+            1. Extract JSON data string from the chat conversation (look for JSON formatted text between ```json and ``` markers)
+            2. Use run_playwright_test tool with the extracted JSON data string to upload and test the JSON
             3. Analyze the returned result string from the upload test
             4. Determine success/failure based on result content
 
@@ -83,13 +128,14 @@ class JSONValidatorAgent(AssistantAgent):
             - FAILURE: If result string contains "错误"
 
             Response actions:
-            - If successful: Report "JSON validation PASSED - file uploaded successfully" and use transfer_to_user_proxy for final approval.
+            - If successful: Report "JSON validation PASSED - data uploaded successfully", output the original JSON data, and TERMINATE the workflow with "TERMINATE".
             - If failed: Report "JSON validation FAILED" with specific error details and use transfer_to_json_generator for corrections.
 
+            Important: Always extract the JSON data from the chat conversation before using run_playwright_test.
             """,
             description="Validates JSON using Playwright automation and web system upload simulation",
             tools=[run_playwright_test],
-            handoffs=["JSON_Generator", "User_Proxy"]
+            handoffs=["JSON_Generator"]
         )
 
 class QAAgent(AssistantAgent):
@@ -97,44 +143,46 @@ class QAAgent(AssistantAgent):
         super().__init__(
             name="QA_Agent",
             model_client=qwen3,
-            system_message=f"""You are the QA agent responsible for logic verification. Reply in Chinese.
-            Review JSON file named "genai_etl_config" under {FILES_DIR}.
-            Your responsibilities:
-            1. Check if input/output mappings match user specifications
-            2. Verify transformation logic is consistent with user demands
-            3. Decision:
-            - If logic is correct: provide JSON file name (e.g., genai_etl_config.json) to JSON_Validator to verify the JSON file.
-            - If NOT correct: specify mismatches and return to JSON_Generator for revision.
-
-            Do not approve unless the JSON perfectly matches user needs.""",
-            description="Performs QA check to ensure JSON logic matches user requirements",
+            system_message=f"""You are the QA agent responsible for checking if the transformation logic matches user requirements.
+            
+            Your ONLY job is to verify that the JSON transformation addresses what the user requested.
+            
+            Simple process:
+            1. Look at the user's original request
+            2. Check if the JSON transformation logic addresses that request
+            3. If it matches the user's needs: forward to JSON_Validator for upload testing
+            4. If it doesn't match: briefly explain what's missing and return to JSON_Generator
+            
+            What to check:
+            - Are the right input datasets being used?
+            - Is the transformation logic doing what the user asked for?
+            - Are the output fields what the user requested?
+            
+            What NOT to check:
+            - Don't validate JSON structure (that's for JSON_Validator)
+            - Don't check technical implementation details
+            - Don't worry about minor formatting issues
+            
+            Be generous in approval - if the basic logic matches the user request, send it to validation.""",
+            description="Checks if transformation logic matches user requirements",
             handoffs=["JSON_Validator", "JSON_Generator"]
         )
 
 
-async def get_team(user_input_func: Callable[[str, Optional[CancellationToken]], Awaitable[str]],) -> Swarm:
+async def get_team() -> Swarm:
     """Initialize the team with the provided user input function."""
-    user_proxy = UserProxyAgent(
-    name="User_Proxy",
-    input_func=user_input_func,
-    description="Manage user approval and feedback",
-)
+
     text_termination_en = TextMentionTermination("TERMINATE")
     text_termination_cn = TextMentionTermination("终止对话")
-    text_termination_user = TextMentionTermination("APPROVE")
-    termination = text_termination_en | text_termination_cn | text_termination_user | MaxMessageTermination(40)
+    termination = text_termination_en | text_termination_cn | MaxMessageTermination(10)
 
+    dataset_selector = DatasetSelectorAgent()
     json_generator = JSONGeneratorAgent()
     qa_agent = QAAgent()
     json_validator = JSONValidatorAgent()
-    user_proxy = UserProxyAgent(
-        name="User_Proxy",
-        input_func=input,
-        description="Manage user approval and feedback",
-    )
-    
+
     team = Swarm(
-        participants=[json_generator, qa_agent, json_validator, user_proxy],
+        participants=[dataset_selector, json_generator, qa_agent, json_validator],
         termination_condition=termination
     )
     
