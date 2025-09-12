@@ -1,0 +1,1724 @@
+
+{
+    "dataFlowId": "d00dde84a85ff487bab0c7f4",
+
+    "etlLib": {
+      "etlNum": 1,
+
+      "name": "Test1",
+
+      "remark": "",
+
+      "type": "1"
+    },
+
+    "output": {
+
+      "name": "Test1",
+
+      "outputDsDesc": "",
+
+      "outputDsId": "j2e5e1264f5e246eb882d35a",
+
+      "outputDsName": "Test1",
+
+      "parentDirId": "t166bd7ca1d7b464ca2f9c6c",
+
+      "type": "OUTPUT_DATASET"
+    },
+
+    "tableList": [
+      {
+        "dsId": "n0b3cf20caa304af1be7ece8",
+
+        "fieldList": [
+          {
+            "fieldLabel": "研究中心",
+
+            "fieldName": "SITENM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "中心编号",
+
+            "fieldName": "SITEID",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "项目",
+
+            "fieldName": "PSTUDYNM",
+
+            "fieldType": "Boolean"
+          },
+
+          {
+            "fieldLabel": "方案编号",
+
+            "fieldName": "PSTUDYID",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "受试者",
+
+            "fieldName": "SUBJID",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "受试者状态",
+
+            "fieldName": "SUBJSTA",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "页面名称",
+
+            "fieldName": "FORMNM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "出生日期",
+
+            "fieldName": "BRTHDAT",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "年龄",
+
+            "fieldName": "AGE",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "年龄_UNIT",
+
+            "fieldName": "AGE_UNIT",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "性别",
+
+            "fieldName": "SEX",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "民族",
+
+            "fieldName": "RACE",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "身高",
+
+            "fieldName": "HEIGHT",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "身高_UNIT",
+
+            "fieldName": "HEIGHT_UNIT",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "WEIGHT",
+
+            "fieldName": "WEIGHT",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "WEIGHT_UNIT",
+
+            "fieldName": "WEIGHT_UNIT",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "受试者情况",
+
+            "fieldName": "U_SUB",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "年龄分组（n, %）",
+
+            "fieldName": "U_AGEG",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "AGE-N(Nmiss)",
+
+            "fieldName": "U_AGEN",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "AGE-Mean±Std",
+
+            "fieldName": "U_AGEMS",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "AGE-M (Q1~Q3)",
+
+            "fieldName": "U_AGEM",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "AGE-Min~Max",
+
+            "fieldName": "U_AGEMM",
+
+            "fieldType": "Number"
+          },
+
+          {
+            "fieldLabel": "诊断",
+
+            "fieldName": "U_DIA",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "现阶段分期",
+
+            "fieldName": "U_CPS",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "ECOG评分",
+
+            "fieldName": "U_ECOG",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "转移器官数量",
+
+            "fieldName": "U_TOQ",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "PD-L1表达状态",
+
+            "fieldName": "U_PDL1",
+
+            "fieldType": "String"
+          }
+        ],
+
+        "recordList": [
+          {
+            "AGE_UNIT": "年龄_UNIT",
+
+            "U_CPS": "现阶段分期",
+
+            "SEX": "性别",
+
+            "U_ECOG": "ECOG评分",
+
+            "SITENM": "研究中心",
+
+            "HEIGHT_UNIT": "身高_UNIT",
+
+            "U_AGEMM": "AGE-Min~Max",
+
+            "U_TOQ": "转移器官数量",
+
+            "U_AGEG": "年龄分组（n, %）",
+
+            "U_AGEMS": "AGE-Mean±Std",
+
+            "PSTUDYID": "方案编号",
+
+            "WEIGHT": "WEIGHT",
+
+            "U_AGEN": "AGE-N(Nmiss)",
+
+            "U_AGEM": "AGE-M (Q1~Q3)",
+
+            "WEIGHT_UNIT": "WEIGHT_UNIT",
+
+            "AGE": "年龄",
+
+            "SUBJSTA": "受试者状态",
+
+            "U_DIA": "诊断",
+
+            "SUBJID": "受试者",
+
+            "SITEID": "中心编号",
+
+            "HEIGHT": "身高",
+
+            "U_SUB": "受试者情况",
+
+            "U_PDL1": "PD-L1表达状态",
+
+            "PSTUDYNM": "项目",
+
+            "FORMNM": "页面名称",
+
+            "RACE": "民族",
+
+            "BRTHDAT": "出生日期"
+          },
+
+          {
+            "AGE_UNIT": "周岁",
+
+            "U_CPS": "I",
+
+            "SEX": "男",
+
+            "U_ECOG": "1",
+
+            "SITENM": "测试医院",
+
+            "HEIGHT_UNIT": "cm",
+
+            "U_AGEMM": "1",
+
+            "U_TOQ": "<=1",
+
+            "U_AGEG": "<65岁",
+
+            "U_AGEMS": "1",
+
+            "PSTUDYID": "CT-100",
+
+            "WEIGHT": "70",
+
+            "U_AGEN": "1",
+
+            "U_AGEM": "1",
+
+            "WEIGHT_UNIT": "kg",
+
+            "AGE": "67",
+
+            "SUBJSTA": "已完成",
+
+            "U_DIA": "晚期初治",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01",
+
+            "HEIGHT": "175",
+
+            "U_SUB": "cycle1",
+
+            "U_PDL1": "1-49%",
+
+            "PSTUDYNM": "评估 PBSS1113 治疗复发/难治性急性髓系白血病患者的安全性、 耐受性、药代动力学、药效动力学与初步疗效的开放性、剂量递 增的 I 期临床研究试验",
+
+            "FORMNM": "人口统计学信息",
+
+            "RACE": "汉族",
+
+            "BRTHDAT": "1955-01-15"
+          },
+
+          {
+            "AGE_UNIT": "周岁",
+
+            "U_CPS": "II",
+
+            "SEX": "男",
+
+            "U_ECOG": "0",
+
+            "SITENM": "测试医院",
+
+            "HEIGHT_UNIT": "cm",
+
+            "U_AGEMM": "1",
+
+            "U_TOQ": ">=2",
+
+            "U_AGEG": ">=65岁",
+
+            "U_AGEMS": "0",
+
+            "PSTUDYID": "CT-100",
+
+            "WEIGHT": "73.5",
+
+            "U_AGEN": "1",
+
+            "U_AGEM": "1",
+
+            "WEIGHT_UNIT": "kg",
+
+            "AGE": "63",
+
+            "SUBJSTA": "已完成",
+
+            "U_DIA": "复发初治",
+
+            "SUBJID": "S002",
+
+            "SITEID": "01",
+
+            "HEIGHT": "170",
+
+            "U_SUB": "cycle2",
+
+            "U_PDL1": ">=50%",
+
+            "PSTUDYNM": "评估 PBSS1113 治疗复发/难治性急性髓系白血病患者的安全性、 耐受性、药代动力学、药效动力学与初步疗效的开放性、剂量递 增的 I 期临床研究试验",
+
+            "FORMNM": "人口统计学信息",
+
+            "RACE": "汉族",
+
+            "BRTHDAT": "1959-02-20"
+          },
+
+          {
+            "AGE_UNIT": "周岁",
+
+            "U_CPS": "III",
+
+            "SEX": "女",
+
+            "U_ECOG": "1",
+
+            "SITENM": "测试医院",
+
+            "HEIGHT_UNIT": "cm",
+
+            "U_AGEMM": "1",
+
+            "U_TOQ": "<=1",
+
+            "U_AGEG": "<65岁",
+
+            "U_AGEMS": "1",
+
+            "PSTUDYID": "CT-100",
+
+            "WEIGHT": "70",
+
+            "U_AGEN": "1",
+
+            "U_AGEM": "0",
+
+            "WEIGHT_UNIT": "kg",
+
+            "AGE": "63",
+
+            "SUBJSTA": "已完成",
+
+            "U_DIA": "晚期初治",
+
+            "SUBJID": "S003",
+
+            "SITEID": "01",
+
+            "HEIGHT": "149",
+
+            "U_SUB": "cycle3",
+
+            "U_PDL1": "1-49%",
+
+            "PSTUDYNM": "评估 PBSS1113 治疗复发/难治性急性髓系白血病患者的安全性、 耐受性、药代动力学、药效动力学与初步疗效的开放性、剂量递 增的 I 期临床研究试验",
+
+            "FORMNM": "人口统计学信息",
+
+            "RACE": "汉族",
+
+            "BRTHDAT": "1959-03-17"
+          },
+
+          {
+            "AGE_UNIT": "周岁",
+
+            "U_CPS": "IV",
+
+            "SEX": "男",
+
+            "U_ECOG": "1",
+
+            "SITENM": "测试医院",
+
+            "HEIGHT_UNIT": "cm",
+
+            "U_AGEMM": "1",
+
+            "U_TOQ": "<=1",
+
+            "U_AGEG": "<65岁",
+
+            "U_AGEMS": "1",
+
+            "PSTUDYID": "CT-100",
+
+            "WEIGHT": "",
+
+            "U_AGEN": "0",
+
+            "U_AGEM": "1",
+
+            "WEIGHT_UNIT": "kg",
+
+            "AGE": "62",
+
+            "SUBJSTA": "筛选失败",
+
+            "U_DIA": "晚期初治",
+
+            "SUBJID": "S004",
+
+            "SITEID": "01",
+
+            "HEIGHT": "",
+
+            "U_SUB": "cycle4",
+
+            "U_PDL1": "1-49%",
+
+            "PSTUDYNM": "评估 PBSS1113 治疗复发/难治性急性髓系白血病患者的安全性、 耐受性、药代动力学、药效动力学与初步疗效的开放性、剂量递 增的 I 期临床研究试验",
+
+            "FORMNM": "人口统计学信息",
+
+            "RACE": "汉族",
+
+            "BRTHDAT": "1960-05-03"
+          },
+
+          {
+            "AGE_UNIT": "",
+
+            "U_CPS": "",
+
+            "SEX": "",
+
+            "U_ECOG": "",
+
+            "SITENM": "测试医院",
+
+            "HEIGHT_UNIT": "",
+
+            "U_AGEMM": "",
+
+            "U_TOQ": "",
+
+            "U_AGEG": "",
+
+            "U_AGEMS": "",
+
+            "PSTUDYID": "CT-100",
+
+            "WEIGHT": "",
+
+            "U_AGEN": "",
+
+            "U_AGEM": "",
+
+            "WEIGHT_UNIT": "",
+
+            "AGE": "",
+
+            "SUBJSTA": "筛选失败",
+
+            "U_DIA": "",
+
+            "SUBJID": "S005",
+
+            "SITEID": "01",
+
+            "HEIGHT": "",
+
+            "U_SUB": "",
+
+            "U_PDL1": "",
+
+            "PSTUDYNM": "评估 PBSS1113 治疗复发/难治性急性髓系白血病患者的安全性、 耐受性、药代动力学、药效动力学与初步疗效的开放性、剂量递 增的 I 期临床研究试验",
+
+            "FORMNM": "人口统计学信息",
+
+            "RACE": "",
+
+            "BRTHDAT": ""
+          },
+
+          {
+            "AGE_UNIT": "",
+
+            "U_CPS": "",
+
+            "SEX": "",
+
+            "U_ECOG": "",
+
+            "SITENM": "测试医院",
+
+            "HEIGHT_UNIT": "",
+
+            "U_AGEMM": "",
+
+            "U_TOQ": "",
+
+            "U_AGEG": "",
+
+            "U_AGEMS": "",
+
+            "PSTUDYID": "CT-100",
+
+            "WEIGHT": "",
+
+            "U_AGEN": "",
+
+            "U_AGEM": "",
+
+            "WEIGHT_UNIT": "",
+
+            "AGE": "",
+
+            "SUBJSTA": "筛选失败",
+
+            "U_DIA": "",
+
+            "SUBJID": "S006",
+
+            "SITEID": "01",
+
+            "HEIGHT": "",
+
+            "U_SUB": "",
+
+            "U_PDL1": "",
+
+            "PSTUDYNM": "评估 PBSS1113 治疗复发/难治性急性髓系白血病患者的安全性、 耐受性、药代动力学、药效动力学与初步疗效的开放性、剂量递 增的 I 期临床研究试验",
+
+            "FORMNM": "人口统计学信息",
+
+            "RACE": "",
+
+            "BRTHDAT": ""
+          },
+
+          {
+            "AGE_UNIT": "周岁",
+
+            "U_CPS": "III",
+
+            "SEX": "男",
+
+            "U_ECOG": "1",
+
+            "SITENM": "测试医院",
+
+            "HEIGHT_UNIT": "cm",
+
+            "U_AGEMM": "0",
+
+            "U_TOQ": ">=2",
+
+            "U_AGEG": "<65岁",
+
+            "U_AGEMS": "0",
+
+            "PSTUDYID": "CT-100",
+
+            "WEIGHT": "67",
+
+            "U_AGEN": "1",
+
+            "U_AGEM": "0",
+
+            "WEIGHT_UNIT": "kg",
+
+            "AGE": "63",
+
+            "SUBJSTA": "已完成",
+
+            "U_DIA": "复发初治",
+
+            "SUBJID": "S007",
+
+            "SITEID": "01",
+
+            "HEIGHT": "165",
+
+            "U_SUB": "cycle5",
+
+            "U_PDL1": "1-49%",
+
+            "PSTUDYNM": "评估 PBSS1113 治疗复发/难治性急性髓系白血病患者的安全性、 耐受性、药代动力学、药效动力学与初步疗效的开放性、剂量递 增的 I 期临床研究试验",
+
+            "FORMNM": "人口统计学信息",
+
+            "RACE": "汉族",
+
+            "BRTHDAT": "1959-12-23"
+          },
+
+          {
+            "AGE_UNIT": "周岁",
+
+            "U_CPS": "IV",
+
+            "SEX": "女",
+
+            "U_ECOG": "0",
+
+            "SITENM": "测试医院",
+
+            "HEIGHT_UNIT": "cm",
+
+            "U_AGEMM": "0",
+
+            "U_TOQ": "<=1",
+
+            "U_AGEG": "<65岁",
+
+            "U_AGEMS": "1",
+
+            "PSTUDYID": "CT-100",
+
+            "WEIGHT": "70",
+
+            "U_AGEN": "1",
+
+            "U_AGEM": "1",
+
+            "WEIGHT_UNIT": "kg",
+
+            "AGE": "68",
+
+            "SUBJSTA": "进行中",
+
+            "U_DIA": "早期初治",
+
+            "SUBJID": "S008",
+
+            "SITEID": "01",
+
+            "HEIGHT": "156",
+
+            "U_SUB": "单药维持",
+
+            "U_PDL1": "1-49%",
+
+            "PSTUDYNM": "评估 PBSS1113 治疗复发/难治性急性髓系白血病患者的安全性、 耐受性、药代动力学、药效动力学与初步疗效的开放性、剂量递 增的 I 期临床研究试验",
+
+            "FORMNM": "人口统计学信息",
+
+            "RACE": "汉族",
+
+            "BRTHDAT": "1954-07-01"
+          },
+
+          {
+            "AGE_UNIT": "周岁",
+
+            "U_CPS": "I",
+
+            "SEX": "女",
+
+            "U_ECOG": "1",
+
+            "SITENM": "测试医院",
+
+            "HEIGHT_UNIT": "cm",
+
+            "U_AGEMM": "1",
+
+            "U_TOQ": "<=1",
+
+            "U_AGEG": "<65岁",
+
+            "U_AGEMS": "1",
+
+            "PSTUDYID": "CT-100",
+
+            "WEIGHT": "61",
+
+            "U_AGEN": "0",
+
+            "U_AGEM": "1",
+
+            "WEIGHT_UNIT": "kg",
+
+            "AGE": "67",
+
+            "SUBJSTA": "进行中",
+
+            "U_DIA": "早期初治",
+
+            "SUBJID": "S009",
+
+            "SITEID": "01",
+
+            "HEIGHT": "159",
+
+            "U_SUB": "治疗结束",
+
+            "U_PDL1": ">=50%",
+
+            "PSTUDYNM": "评估 PBSS1113 治疗复发/难治性急性髓系白血病患者的安全性、 耐受性、药代动力学、药效动力学与初步疗效的开放性、剂量递 增的 I 期临床研究试验",
+
+            "FORMNM": "人口统计学信息",
+
+            "RACE": "汉族",
+
+            "BRTHDAT": "1955-07-21"
+          }
+        ],
+
+        "tableNameCn": "人口统计学信息",
+
+        "tableNameEn": "CDASH_DM"
+      },
+
+      {
+        "dsId": "mdabd04c51aab4486bee9d6a",
+
+        "fieldList": [
+          {
+            "fieldLabel": "研究中心",
+
+            "fieldName": "SITENM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "中心编号",
+
+            "fieldName": "SITEID",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "受试者",
+
+            "fieldName": "SUBJID",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "页面名称",
+
+            "fieldName": "FORMNM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "记录号",
+
+            "fieldName": "RECREP",
+
+            "fieldType": "Boolean"
+          },
+
+          {
+            "fieldLabel": "不良事件名称",
+
+            "fieldName": "AETERM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "开始日期",
+
+            "fieldName": "AESTDAT",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "开始时间",
+
+            "fieldName": "AESTTIM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "结束日期",
+
+            "fieldName": "AEENDAT",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "结束时间",
+
+            "fieldName": "AEENTIM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "AE分类",
+
+            "fieldName": "AESDTH",
+
+            "fieldType": "Date"
+          },
+
+          {
+            "fieldLabel": "是否为严重不良事件",
+
+            "fieldName": "AESER",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "是否为限制性毒性事件",
+
+            "fieldName": "U_AELIM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "严重程度（CTCAE）",
+
+            "fieldName": "AESEV",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "与研究用药的因果关系",
+
+            "fieldName": "AEREL",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "是否因严重不良事件退出试验",
+
+            "fieldName": "AEDIS",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "IrAE",
+
+            "fieldName": "U_IRAE",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "是否导致药物暂停",
+
+            "fieldName": "U_DPYN",
+
+            "fieldType": "Boolean"
+          },
+
+          {
+            "fieldLabel": "是否导致药物降低剂量",
+
+            "fieldName": "U_DDYN",
+
+            "fieldType": "Boolean"
+          },
+
+          {
+            "fieldLabel": "是否导致永久停药",
+
+            "fieldName": "U_SEYN",
+
+            "fieldType": "Boolean"
+          }
+        ],
+
+        "recordList": [
+          {
+            "U_AELIM": "是否为限制性毒性事件",
+
+            "AEREL": "与研究用药的因果关系",
+
+            "SITENM": "研究中心",
+
+            "AESER": "是否为严重不良事件",
+
+            "SUBJID": "受试者",
+
+            "SITEID": "中心编号",
+
+            "U_DPYN": "是否导致药物暂停",
+
+            "AETERM": "不良事件名称",
+
+            "AEENDAT": "结束日期",
+
+            "AEENTIM": "结束时间",
+
+            "FORMNM": "页面名称",
+
+            "RECREP": "记录号",
+
+            "AESEV": "严重程度（CTCAE）",
+
+            "AESDTH": "AE分类",
+
+            "U_DDYN": "是否导致药物降低剂量",
+
+            "U_SEYN": "是否导致永久停药",
+
+            "AESTDAT": "开始日期",
+
+            "AEDIS": "是否因严重不良事件退出试验",
+
+            "U_IRAE": "IrAE",
+
+            "AESTTIM": "开始时间"
+          },
+
+          {
+            "U_AELIM": "是",
+
+            "AEREL": "可能有关",
+
+            "SITENM": "测试医院",
+
+            "AESER": "否",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01",
+
+            "U_DPYN": "否",
+
+            "AETERM": "恶心",
+
+            "AEENDAT": "",
+
+            "AEENTIM": "",
+
+            "FORMNM": "不良事件",
+
+            "RECREP": "1",
+
+            "AESEV": "2级",
+
+            "AESDTH": "诊治问题",
+
+            "U_DDYN": "是",
+
+            "U_SEYN": "否",
+
+            "AESTDAT": "2022-04-14",
+
+            "AEDIS": "否",
+
+            "U_IRAE": "是",
+
+            "AESTTIM": "00:00"
+          },
+
+          {
+            "U_AELIM": "否",
+
+            "AEREL": "可能有关",
+
+            "SITENM": "测试医院",
+
+            "AESER": "是",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01",
+
+            "U_DPYN": "否",
+
+            "AETERM": "呕吐",
+
+            "AEENDAT": "2022-04-17",
+
+            "AEENTIM": "23:59",
+
+            "FORMNM": "不良事件",
+
+            "RECREP": "2",
+
+            "AESEV": "1级",
+
+            "AESDTH": "不良治疗",
+
+            "U_DDYN": "是",
+
+            "U_SEYN": "否",
+
+            "AESTDAT": "2022-04-14",
+
+            "AEDIS": "否",
+
+            "U_IRAE": "是",
+
+            "AESTTIM": "00:00"
+          },
+
+          {
+            "U_AELIM": "否",
+
+            "AEREL": "可能有关",
+
+            "SITENM": "测试医院",
+
+            "AESER": "否",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01",
+
+            "U_DPYN": "否",
+
+            "AETERM": "呕吐",
+
+            "AEENDAT": "",
+
+            "AEENTIM": "",
+
+            "FORMNM": "不良事件",
+
+            "RECREP": "3",
+
+            "AESEV": "2级",
+
+            "AESDTH": "意外事件",
+
+            "U_DDYN": "否",
+
+            "U_SEYN": "否",
+
+            "AESTDAT": "2022-04-17",
+
+            "AEDIS": "否",
+
+            "U_IRAE": "否",
+
+            "AESTTIM": "00:00"
+          },
+
+          {
+            "U_AELIM": "是",
+
+            "AEREL": "肯定无关",
+
+            "SITENM": "测试医院",
+
+            "AESER": "是",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01",
+
+            "U_DPYN": "否",
+
+            "AETERM": "发热",
+
+            "AEENDAT": "2022-05-01",
+
+            "AEENTIM": "23:59",
+
+            "FORMNM": "不良事件",
+
+            "RECREP": "4",
+
+            "AESEV": "1级",
+
+            "AESDTH": "手术相关",
+
+            "U_DDYN": "否",
+
+            "U_SEYN": "否",
+
+            "AESTDAT": "2022-04-29",
+
+            "AEDIS": "是",
+
+            "U_IRAE": "否",
+
+            "AESTTIM": "00:00"
+          },
+
+          {
+            "U_AELIM": "是",
+
+            "AEREL": "肯定无关",
+
+            "SITENM": "测试医院",
+
+            "AESER": "否",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01",
+
+            "U_DPYN": "否",
+
+            "AETERM": "发热",
+
+            "AEENDAT": "2022-05-06",
+
+            "AEENTIM": "23:59",
+
+            "FORMNM": "不良事件",
+
+            "RECREP": "5",
+
+            "AESEV": "1级",
+
+            "AESDTH": "手术相关",
+
+            "U_DDYN": "是",
+
+            "U_SEYN": "否",
+
+            "AESTDAT": "2022-05-05",
+
+            "AEDIS": "否",
+
+            "U_IRAE": "是",
+
+            "AESTTIM": "00:00"
+          },
+
+          {
+            "U_AELIM": "否",
+
+            "AEREL": "肯定无关",
+
+            "SITENM": "测试医院",
+
+            "AESER": "否",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01",
+
+            "U_DPYN": "是",
+
+            "AETERM": "高血糖症",
+
+            "AEENDAT": "",
+
+            "AEENTIM": "",
+
+            "FORMNM": "不良事件",
+
+            "RECREP": "6",
+
+            "AESEV": "1级",
+
+            "AESDTH": "不良治疗",
+
+            "U_DDYN": "是",
+
+            "U_SEYN": "是",
+
+            "AESTDAT": "2022-05-06",
+
+            "AEDIS": "否",
+
+            "U_IRAE": "是",
+
+            "AESTTIM": "00:00"
+          },
+
+          {
+            "U_AELIM": "是",
+
+            "AEREL": "可能无关",
+
+            "SITENM": "测试医院",
+
+            "AESER": "是",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01",
+
+            "U_DPYN": "是",
+
+            "AETERM": "急性髓系白血病",
+
+            "AEENDAT": "2022-05-09",
+
+            "AEENTIM": "23:59",
+
+            "FORMNM": "不良事件",
+
+            "RECREP": "7",
+
+            "AESEV": "5级",
+
+            "AESDTH": "不良治疗",
+
+            "U_DDYN": "否",
+
+            "U_SEYN": "是",
+
+            "AESTDAT": "2022-05-09",
+
+            "AEDIS": "是",
+
+            "U_IRAE": "否",
+
+            "AESTTIM": "00:00"
+          },
+
+          {
+            "U_AELIM": "否",
+
+            "AEREL": "可能有关",
+
+            "SITENM": "测试医院",
+
+            "AESER": "否",
+
+            "SUBJID": "S003",
+
+            "SITEID": "01",
+
+            "U_DPYN": "否",
+
+            "AETERM": "恶心",
+
+            "AEENDAT": "2022-07-12",
+
+            "AEENTIM": "23:59",
+
+            "FORMNM": "不良事件",
+
+            "RECREP": "1",
+
+            "AESEV": "1级",
+
+            "AESDTH": "不良治疗",
+
+            "U_DDYN": "是",
+
+            "U_SEYN": "否",
+
+            "AESTDAT": "2022-07-12",
+
+            "AEDIS": "否",
+
+            "U_IRAE": "是",
+
+            "AESTTIM": "00:00"
+          },
+
+          {
+            "U_AELIM": "否",
+
+            "AEREL": "可能有关",
+
+            "SITENM": "测试医院",
+
+            "AESER": "否",
+
+            "SUBJID": "S003",
+
+            "SITEID": "01",
+
+            "U_DPYN": "否",
+
+            "AETERM": "呕吐",
+
+            "AEENDAT": "2022-07-12",
+
+            "AEENTIM": "23:59",
+
+            "FORMNM": "不良事件",
+
+            "RECREP": "2",
+
+            "AESEV": "2级",
+
+            "AESDTH": "意外事件",
+
+            "U_DDYN": "是",
+
+            "U_SEYN": "否",
+
+            "AESTDAT": "2022-07-12",
+
+            "AEDIS": "否",
+
+            "U_IRAE": "是",
+
+            "AESTTIM": "00:00"
+          }
+        ],
+
+        "tableNameCn": "不良事件",
+
+        "tableNameEn": "CDASH_AE"
+      },
+
+      {
+        "dsId": "d08c48e6b0eb94b46ac533d7",
+
+        "fieldList": [
+          {
+            "fieldLabel": "研究中心",
+
+            "fieldName": "SITENM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "中心编号",
+
+            "fieldName": "SITEID",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "受试者",
+
+            "fieldName": "SUBJID",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "页面名称",
+
+            "fieldName": "FORMNM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "记录号",
+
+            "fieldName": "RECREP",
+
+            "fieldType": "Boolean"
+          },
+
+          {
+            "fieldLabel": "药物名称",
+
+            "fieldName": "CMTRT",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "开始日期",
+
+            "fieldName": "CMSTDAT",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "开始时间",
+
+            "fieldName": "CMSTTIM",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "结束日期",
+
+            "fieldName": "CMENDAT",
+
+            "fieldType": "String"
+          },
+
+          {
+            "fieldLabel": "结束时间",
+
+            "fieldName": "CMENTIM",
+
+            "fieldType": "String"
+          }
+        ],
+
+        "recordList": [
+          {
+            "FORMNM": "页面名称",
+
+            "CMSTTIM": "开始时间",
+
+            "CMENTIM": "结束时间",
+
+            "CMSTDAT": "开始日期",
+
+            "CMENDAT": "结束日期",
+
+            "RECREP": "记录号",
+
+            "SITENM": "研究中心",
+
+            "CMTRT": "药物名称",
+
+            "SUBJID": "受试者",
+
+            "SITEID": "中心编号"
+          },
+
+          {
+            "FORMNM": "既往及合并用药",
+
+            "CMSTTIM": "00:00",
+
+            "CMENTIM": "23:59",
+
+            "CMSTDAT": "2022-04-03",
+
+            "CMENDAT": "2022-04-08",
+
+            "RECREP": "1",
+
+            "SITENM": "测试医院",
+
+            "CMTRT": "复方碳酸氢钠含漱液",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01"
+          },
+
+          {
+            "FORMNM": "既往及合并用药",
+
+            "CMSTTIM": "00:00",
+
+            "CMENTIM": "23:59",
+
+            "CMSTDAT": "2022-04-06",
+
+            "CMENDAT": "2022-04-08",
+
+            "RECREP": "2",
+
+            "SITENM": "测试医院",
+
+            "CMTRT": "L-谷氨酰胺呱仑酸钠颗粒",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01"
+          },
+
+          {
+            "FORMNM": "既往及合并用药",
+
+            "CMSTTIM": "00:00",
+
+            "CMENTIM": "23:59",
+
+            "CMSTDAT": "2022-04-09",
+
+            "CMENDAT": "2022-04-20",
+
+            "RECREP": "3",
+
+            "SITENM": "测试医院",
+
+            "CMTRT": "氯化钾针",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01"
+          },
+
+          {
+            "FORMNM": "既往及合并用药",
+
+            "CMSTTIM": "00:00",
+
+            "CMENTIM": "23:59",
+
+            "CMSTDAT": "2022-04-09",
+
+            "CMENDAT": "2022-04-20",
+
+            "RECREP": "4",
+
+            "SITENM": "测试医院",
+
+            "CMTRT": "维生素B6注射液",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01"
+          },
+
+          {
+            "FORMNM": "既往及合并用药",
+
+            "CMSTTIM": "00:00",
+
+            "CMENTIM": "23:59",
+
+            "CMSTDAT": "2022-04-09",
+
+            "CMENDAT": "2022-04-14",
+
+            "RECREP": "5",
+
+            "SITENM": "测试医院",
+
+            "CMTRT": "泮托拉唑肠溶片",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01"
+          },
+
+          {
+            "FORMNM": "既往及合并用药",
+
+            "CMSTTIM": "00:00",
+
+            "CMENTIM": "23:59",
+
+            "CMSTDAT": "2022-04-04",
+
+            "CMENDAT": "2022-04-08",
+
+            "RECREP": "6",
+
+            "SITENM": "测试医院",
+
+            "CMTRT": "复方愈创甘油醚口服溶液",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01"
+          },
+
+          {
+            "FORMNM": "既往及合并用药",
+
+            "CMSTTIM": "00:00",
+
+            "CMENTIM": "23:59",
+
+            "CMSTDAT": "2022-04-09",
+
+            "CMENDAT": "2022-04-13",
+
+            "RECREP": "7",
+
+            "SITENM": "测试医院",
+
+            "CMTRT": "复方碳酸氢钠含漱液",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01"
+          },
+
+          {
+            "FORMNM": "既往及合并用药",
+
+            "CMSTTIM": "00:00",
+
+            "CMENTIM": "23:59",
+
+            "CMSTDAT": "2022-04-12",
+
+            "CMENDAT": "2022-04-14",
+
+            "RECREP": "8",
+
+            "SITENM": "测试医院",
+
+            "CMTRT": "复方庆大霉素普鲁卡因口服溶液",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01"
+          },
+
+          {
+            "FORMNM": "既往及合并用药",
+
+            "CMSTTIM": "00:00",
+
+            "CMENTIM": "23:59",
+
+            "CMSTDAT": "2022-04-16",
+
+            "CMENDAT": "2022-04-19",
+
+            "RECREP": "9",
+
+            "SITENM": "测试医院",
+
+            "CMTRT": "泮托拉唑肠溶片",
+
+            "SUBJID": "S001",
+
+            "SITEID": "01"
+          }
+        ],
+
+        "tableNameCn": "既往及合并用药",
+
+        "tableNameEn": "CDASH_CM"
+      }
+    ],
+      "remark": "任务：\n1. 从合并用药表（CM）和不良事件表（AE）整合数据。\n2. 将 AE 表的 AE名称（AETERM）和 AE开始时间（AESTDAT）关联到合并用药表（CM）。\n3. 关联规则：\n   - 使用 LEFT JOIN，将 CM 作为主表。\n   - AE受试者与CM受试者相同，AE名称（AETERM）与用药名称（CMTRT）相同，进行匹配。\n4. 合并用药表新增字段：\n   - AE名称（来自 AE 表）\n   - AE开始时间（来自 AE 表）\n   - AE结束时间（来自 AE 表）\n\n涉及字段：\n- 受试者ID（Subject）\n- AE 访视/Visit（VISIT，如有）\n- AE 名称（AETERM）\n- AE 开始时间（AESTDAT）\n- AE 结束时间 （AEENDAT）\n- 用药名称（CMTRT）\n- 用药开始时间（CMSTDAT）\n- 用药结束时间（CMENDAT）\n\n输出：\n- 返回整合后的数据表，每行包含用药信息和匹配的 AE 信息。\n- 保证 LEFT JOIN 逻辑正确，即用药记录即使没有对应 AE 也要保留。"
+}

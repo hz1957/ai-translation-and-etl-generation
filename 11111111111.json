@@ -1,0 +1,164 @@
+{
+  "uId": null,
+  "dataFlowId": "d00dde84a85ff487bab0c7f4",
+  "domId": "guanbi",
+  "name": "Test1",
+  "parentDirId": null,
+  "triggerType": null,
+  "cron": null,
+  "executionCount": null,
+  "executionSuccessCount": null,
+  "lastExecution": null,
+  "lastExecuteTime": null,
+  "displayType": null,
+  "status": null,
+  "utime": null,
+  "ctime": null,
+  "version": null,
+  "description": "test",
+  "annotation": { "list": [] },
+  "fuseConfig": null,
+  "id": "d00dde84a85ff487bab0c7f4",
+  "meta": [
+    {
+      "type": "INPUT_DATASET",
+      "name": "CDASH_DM",
+      "displayType": "CSV",
+      "preview": { "scope": "ALL", "config": {} },
+      "cascadeUpdateEnabled": false,
+      "inputDsId": "n0b3cf20caa304af1be7ece8",
+      "id": "id_1757602608019",
+      "position": {},
+      "sources": []
+    },
+    {
+      "type": "INPUT_DATASET",
+      "name": "CDASH_AE",
+      "displayType": "CSV",
+      "preview": { "scope": "ALL", "config": {} },
+      "cascadeUpdateEnabled": false,
+      "inputDsId": "mdabd04c51aab4486bee9d6a",
+      "id": "id_1757602608020",
+      "position": {},
+      "sources": []
+    },
+    {
+      "type": "INPUT_DATASET",
+      "name": "CDASH_CM",
+      "displayType": "CSV",
+      "preview": { "scope": "ALL", "config": {} },
+      "cascadeUpdateEnabled": false,
+      "inputDsId": "d08c48e6b0eb94b46ac533d7",
+      "id": "id_1757602608021",
+      "position": {},
+      "sources": []
+    },
+    {
+      "type": "OUTPUT_DATASET",
+      "parentDirId": "t166bd7ca1d7b464ca2f9c6c",
+      "dataSource": {
+        "created": true,
+        "dsId": "j2e5e1264f5e246eb882d35a",
+        "name": "Test1",
+        "dirPath": [{ "dirId": "t166bd7ca1d7b464ca2f9c6c", "dirName": "demo" }],
+        "parentDirName": "demo",
+        "parentDirId": "t166bd7ca1d7b464ca2f9c6c"
+      },
+      "id": "id_1757602608022",
+      "position": {},
+      "name": "Test1",
+      "columnAnnotations": [],
+      "outputDsName": "Test1",
+      "sources": []
+    }
+  ],
+  "inputs": [
+    {
+      "dsId": "n0b3cf20caa304af1be7ece8",
+      "name": "人口统计学信息",
+      "fields": [
+        { "name": "研究中心", "type": "String", "seqNo": 0 },
+        { "name": "中心编号", "type": "String", "seqNo": 1 },
+        { "name": "项目", "type": "Boolean", "seqNo": 2 },
+        { "name": "方案编号", "type": "String", "seqNo": 3 },
+        { "name": "受试者", "type": "String", "seqNo": 4 },
+        { "name": "受试者状态", "type": "String", "seqNo": 5 },
+        { "name": "页面名称", "type": "String", "seqNo": 6 },
+        { "name": "出生日期", "type": "String", "seqNo": 7 },
+        { "name": "年龄", "type": "Number", "seqNo": 8 },
+        { "name": "年龄_UNIT", "type": "Number", "seqNo": 9 },
+        { "name": "性别", "type": "String", "seqNo": 10 },
+        { "name": "民族", "type": "String", "seqNo": 11 },
+        { "name": "身高", "type": "Number", "seqNo": 12 },
+        { "name": "身高_UNIT", "type": "Number", "seqNo": 13 },
+        { "name": "WEIGHT", "type": "Number", "seqNo": 14 },
+        { "name": "WEIGHT_UNIT", "type": "Number", "seqNo": 15 },
+        { "name": "受试者情况", "type": "String", "seqNo": 16 },
+        { "name": "年龄分组（n, %）", "type": "Number", "seqNo": 17 },
+        { "name": "AGE-N(Nmiss)", "type": "Number", "seqNo": 18 },
+        { "name": "AGE-Mean±Std", "type": "Number", "seqNo": 19 },
+        { "name": "AGE-M (Q1~Q3)", "type": "Number", "seqNo": 20 },
+        { "name": "AGE-Min~Max", "type": "Number", "seqNo": 21 },
+        { "name": "诊断", "type": "String", "seqNo": 22 },
+        { "name": "现阶段分期", "type": "String", "seqNo": 23 },
+        { "name": "ECOG评分", "type": "String", "seqNo": 24 },
+        { "name": "转移器官数量", "type": "String", "seqNo": 25 },
+        { "name": "PD-L1表达状态", "type": "String", "seqNo": 26 }
+      ]
+    },
+    {
+      "dsId": "mdabd04c51aab4486bee9d6a",
+      "name": "不良事件",
+      "fields": [
+        { "name": "研究中心", "type": "String", "seqNo": 0 },
+        { "name": "中心编号", "type": "String", "seqNo": 1 },
+        { "name": "受试者", "type": "String", "seqNo": 2 },
+        { "name": "页面名称", "type": "String", "seqNo": 3 },
+        { "name": "记录号", "type": "Boolean", "seqNo": 4 },
+        { "name": "不良事件名称", "type": "String", "seqNo": 5 },
+        { "name": "开始日期", "type": "String", "seqNo": 6 },
+        { "name": "开始时间", "type": "String", "seqNo": 7 },
+        { "name": "结束日期", "type": "String", "seqNo": 8 },
+        { "name": "结束时间", "type": "String", "seqNo": 9 },
+        { "name": "AE分类", "type": "Date", "seqNo": 10 },
+        { "name": "是否为严重不良事件", "type": "String", "seqNo": 11 },
+        { "name": "是否为限制性毒性事件", "type": "String", "seqNo": 12 },
+        { "name": "严重程度（CTCAE）", "type": "String", "seqNo": 13 },
+        { "name": "与研究用药的因果关系", "type": "String", "seqNo": 14 },
+        { "name": "是否因严重不良事件退出试验", "type": "String", "seqNo": 15 },
+        { "name": "IrAE", "type": "String", "seqNo": 16 },
+        { "name": "是否导致药物暂停", "type": "Boolean", "seqNo": 17 },
+        { "name": "是否导致药物降低剂量", "type": "Boolean", "seqNo": 18 },
+        { "name": "是否导致永久停药", "type": "Boolean", "seqNo": 19 }
+      ]
+    },
+    {
+      "dsId": "d08c48e6b0eb94b46ac533d7",
+      "name": "既往及合并用药",
+      "fields": [
+        { "name": "研究中心", "type": "String", "seqNo": 0 },
+        { "name": "中心编号", "type": "String", "seqNo": 1 },
+        { "name": "受试者", "type": "String", "seqNo": 2 },
+        { "name": "页面名称", "type": "String", "seqNo": 3 },
+        { "name": "记录号", "type": "Boolean", "seqNo": 4 },
+        { "name": "药物名称", "type": "String", "seqNo": 5 },
+        { "name": "开始日期", "type": "String", "seqNo": 6 },
+        { "name": "开始时间", "type": "String", "seqNo": 7 },
+        { "name": "结束日期", "type": "String", "seqNo": 8 },
+        { "name": "结束时间", "type": "String", "seqNo": 9 }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "dsId": "j2e5e1264f5e246eb882d35a",
+      "name": "Test1",
+      "dirPath": [{ "dirId": "t166bd7ca1d7b464ca2f9c6c", "dirName": "demo" }],
+      "created": true,
+      "parentDirId": "t166bd7ca1d7b464ca2f9c6c",
+      "parentDirName": "demo"
+    }
+  ],
+  "platform": "bi",
+  "task_description": "任务：\\n1. 从病史表（MH）和不良事件表（AE）整合数据。\\n2. 将 AE 表的 AE名称（AETERM）和 AE开始时间（AESTDAT）关联到病史表（MH）。\\n3. 关联规则：\\n   - 使用 LEFT JOIN，将 MH 作为主表。\\n   - AE受试者与MH受试者相同，AE名称（AETERM）与病史名称（MHTERM）相同，进行匹配。\\n4. 病史表新增字段：\\n   - AE名称（来自 AE 表）\\n   - AE开始时间（来自 AE 表）\\n   - AE结束时间（来自AE表）\\n\\n涉及字段：\\n- 受试者ID（Subject）\\n- AE 访视/Visit（VISIT，如有）\\n- AE 名称（AETERM）\\n- AE 开始时间（AESTDAT）\\n- AE 结束时间 （AEENDAT）\\n- 病史名称（MHTERM）\\n- 病史是否持续（MHONGO）\\n- 病史开始时间（MHSTDAT）\\n- 病史结束时间（MHENDAT）\\n\\n输出：\\n- 返回整合后的数据表，每行包含病史信息和匹配的 AE 信息。\\n- 保证 LEFT JOIN 逻辑正确，即病史记录即使没有对应 AE 也要保留。"
+}

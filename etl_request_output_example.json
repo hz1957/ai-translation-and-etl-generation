@@ -1,0 +1,55 @@
+{
+  "outputs": [
+    {
+      "dsId": "w145afa113cfe4dffa768e9d",
+      "created": true,
+      "name": "医药006",
+      "dirPath": [
+        { "dirId": "w8c6264c893a7482890cc62c", "dirName": "数据集3" }
+      ],
+      "parentDirName": "数据集3",
+      "parentDirId": "w8c6264c893a7482890cc62c"
+    }
+  ],
+  "annotation": { "hidden": false, "list": [] },
+  "cron": {
+    "cronType": "DAILY",
+    "value": "{\"hours\":\"00\",\"minute\":\"00\"}"
+  },
+  "name": "医药006",
+  "triggerType": "CRON",
+  "version": 1,
+  "actions": [
+    {
+      "preview": { "scope": "ALL", "config": {} },
+      "inputDsId": "",
+      "sources": [],
+      "name": "输入数据集",
+      "cascadeUpdateEnabled": false,
+      "id": "id_1757497552487",
+      "position": { "x": 100, "y": 100 },
+      "type": "INPUT_DATASET"
+    },
+    {
+      "sources": ["id_1757497552487"],
+      "name": "医药006",
+      "outputDsName": "医药006",
+      "id": "id_1757497552488",
+      "position": { "x": 300, "y": 100 },
+      "type": "OUTPUT_DATASET",
+      "dataSource": {
+        "dirPath": [
+          { "dirId": "w8c6264c893a7482890cc62c", "dirName": "数据集3" }
+        ],
+        "parentDirName": "数据集3",
+        "parentDirId": "w8c6264c893a7482890cc62c"
+      },
+      "columnAnnotations": [],
+      "outputDsDesc": "",
+      "parentDirId": "w8c6264c893a7482890cc62c"
+    }
+  ],
+  "config": { "enableSchedule": false },
+  "dataFlowId": "k266abbcd931b414ab626506",
+  "parentDirId": "rf2e3d79976124a74ade8c5e"
+}

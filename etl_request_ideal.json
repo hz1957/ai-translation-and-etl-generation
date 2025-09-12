@@ -1,0 +1,152 @@
+{
+  "uId": null,
+  "dataFlowId": "m424b127183dc4abbbe4efec",
+  "domId": "guanbi",
+  "name": "genai_etl_config",
+  "parentDirId": null,
+  "triggerType": null,
+  "cron": null,
+  "executionCount": null,
+  "executionSuccessCount": null,
+  "lastExecution": null,
+  "lastExecuteTime": null,
+  "displayType": null,
+  "status": null,
+  "utime": null,
+  "ctime": null,
+  "version": null,
+  "description": "test",
+  "annotation": { "list": [] },
+  "fuseConfig": null,
+  "id": "m424b127183dc4abbbe4efec",
+  "meta": [
+    {
+      "type": "INPUT_DATASET",
+      "name": "CDASH_AE",
+      "displayType": "CSV",
+      "preview": { "scope": "ALL", "config": {} },
+      "cascadeUpdateEnabled": false,
+      "inputDsId": "facddcc2ccc8f4be4823c07b",
+      "id": "id_1757493333372",
+      "position": { "x": 238, "y": 188 },
+      "sources": []
+    },
+    {
+      "type": "INPUT_DATASET",
+      "name": "CDASH_LB",
+      "displayType": "CSV",
+      "preview": { "scope": "ALL", "config": {} },
+      "cascadeUpdateEnabled": false,
+      "inputDsId": "v1e6db5955b28425c8da6f9a",
+      "id": "id_1757493351979",
+      "position": { "x": 234, "y": 318 },
+      "sources": []
+    },
+    {
+      "type": "OUTPUT_DATASET",
+      "parentDirId": "t166bd7ca1d7b464ca2f9c6c",
+      "dataSource": {
+        "created": true,
+        "dsId": "j2e5e1264f5e246eb882d35a",
+        "name": "test_output",
+        "dirPath": [
+          { "dirId": "t166bd7ca1d7b464ca2f9c6c", "dirName": "demo" }
+        ],
+        "parentDirName": "demo",
+        "parentDirId": "t166bd7ca1d7b464ca2f9c6c"
+      },
+      "id": "id_1757493364850",
+      "position": { "x": 820, "y": 311 },
+      "name": "test_output",
+      "columnAnnotations": [],
+      "outputDsName": "test_output",
+      "sources": []
+    },
+    {
+      "type": "INPUT_DATASET",
+      "name": "CDASH_MH",
+      "displayType": "CSV",
+      "preview": { "scope": "ALL", "config": {} },
+      "cascadeUpdateEnabled": false,
+      "inputDsId": "x350d5f92c56742b88c93fdf",
+      "id": "id_1757493543445",
+      "position": { "x": 228, "y": 87 },
+      "sources": []
+    }
+  ],
+  "inputs": [
+    {
+      "dsId": "facddcc2ccc8f4be4823c07b",
+      "name": "CDASH_AE",
+      "fields": [
+        { "name": "研究中心", "type": "STRING", "seqNo": 0 },
+        { "name": "中心编号", "type": "LONG", "seqNo": 1 },
+        { "name": "受试者", "type": "STRING", "seqNo": 2 },
+        { "name": "页面名称", "type": "STRING", "seqNo": 3 },
+        { "name": "记录号", "type": "LONG", "seqNo": 4 },
+        { "name": "不良事件名称", "type": "STRING", "seqNo": 5 },
+        { "name": "开始日期", "type": "DATE", "seqNo": 6 },
+        { "name": "开始时间", "type": "STRING", "seqNo": 7 },
+        { "name": "结束日期", "type": "DATE", "seqNo": 8 },
+        { "name": "结束时间", "type": "STRING", "seqNo": 9 },
+        { "name": "AE分类", "type": "STRING", "seqNo": 10 },
+        { "name": "是否为严重不良事件", "type": "STRING", "seqNo": 11 },
+        { "name": "是否为限制性毒性事件", "type": "STRING", "seqNo": 12 },
+        { "name": "严重程度（CTCAE）", "type": "STRING", "seqNo": 13 },
+        { "name": "与研究用药的因果关系", "type": "STRING", "seqNo": 14 },
+        { "name": "是否因严重不良事件退出试验", "type": "STRING", "seqNo": 15 },
+        { "name": "IrAE", "type": "STRING", "seqNo": 16 },
+        { "name": "是否导致药物暂停", "type": "STRING", "seqNo": 17 },
+        { "name": "是否导致药物降低剂量", "type": "STRING", "seqNo": 18 },
+        { "name": "是否导致永久停药", "type": "STRING", "seqNo": 19 }
+      ]
+    },
+    {
+      "dsId": "v1e6db5955b28425c8da6f9a",
+      "name": "CDASH_LB",
+      "fields": [
+        { "name": "研究中心", "type": "STRING", "seqNo": 0 },
+        { "name": "中心编号", "type": "LONG", "seqNo": 1 },
+        { "name": "受试者", "type": "STRING", "seqNo": 2 },
+        { "name": "访视名称", "type": "STRING", "seqNo": 3 },
+        { "name": "访视OID", "type": "STRING", "seqNo": 4 },
+        { "name": "页面名称", "type": "STRING", "seqNo": 5 },
+        { "name": "记录号", "type": "LONG", "seqNo": 6 },
+        { "name": "采样日期", "type": "DATE", "seqNo": 7 },
+        { "name": "检查项目", "type": "STRING", "seqNo": 8 },
+        { "name": "检查结果", "type": "STRING", "seqNo": 9 },
+        { "name": "单位", "type": "STRING", "seqNo": 10 },
+        { "name": "下限", "type": "DOUBLE", "seqNo": 11 },
+        { "name": "上限", "type": "DOUBLE", "seqNo": 12 },
+        { "name": "基线数据", "type": "DOUBLE", "seqNo": 13 }
+      ]
+    },
+    {
+      "dsId": "x350d5f92c56742b88c93fdf",
+      "name": "CDASH_MH",
+      "fields": [
+        { "name": "研究中心", "type": "STRING", "seqNo": 0 },
+        { "name": "中心编号", "type": "LONG", "seqNo": 1 },
+        { "name": "受试者", "type": "STRING", "seqNo": 2 },
+        { "name": "页面名称", "type": "STRING", "seqNo": 3 },
+        { "name": "记录号", "type": "LONG", "seqNo": 4 },
+        { "name": "疾病名称", "type": "STRING", "seqNo": 5 },
+        { "name": "开始日期", "type": "STRING", "seqNo": 6 },
+        { "name": "结束日期", "type": "DATE", "seqNo": 7 }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "dsId": "j2e5e1264f5e246eb882d35a",
+      "name": "Test1",
+      "dirPath": [
+        { "dirId": "t166bd7ca1d7b464ca2f9c6c", "dirName": "demo" }
+      ],
+      "created": true,
+      "parentDirId": "t166bd7ca1d7b464ca2f9c6c",
+      "parentDirName": "demo"
+    }
+  ],
+  "platform": "bi"
+}
